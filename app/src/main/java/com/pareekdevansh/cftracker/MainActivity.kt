@@ -39,47 +39,27 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_contest, R.id.navigation_search, R.id.navigation_profile
             )
         )
-//        val stamp = System.currentTimeMillis()
-//        val date = Date(stamp)
-//        Log.d("test" , date.toString())
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 //        getContestList()
-        getUser()
+//        getUser()
     }
 
-    private fun getUser() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response =  RetrofitInstance.api.searchUser(listOf("devanshpareek"))
-                if (response.isSuccessful){
-                    Log.d("user" , response.body().toString())
-                }
-            }
-            catch (e  :Exception ) {
-                Log.d("user", e.message.toString())
-            }
-        }
-    }
+//    private fun getUser() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val response =  RetrofitInstance.api.searchUser(listOf("sumit"))
+//                if (response.isSuccessful){
+//                    Log.d("user" , response.body().toString())
+//                }
+//            }
+//            catch (e  :Exception ) {
+//                Log.d("user", e.message.toString())
+//            }
+//        }
+//    }
 
-    private fun getContestList() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response =  RetrofitInstance.api.getContests()
-                if (response.isSuccessful){
-                    Log.d("contest" , response.body().toString())
-                }
-                else{
-                    Log.d("contest" , "found some error")
 
-                }
-            }
-            catch (e  :Exception ) {
-                Log.d("contest", e.message.toString())
-            }
-        }
-
-    }
 
 }
