@@ -26,13 +26,12 @@ class ContestAdapter(private val contests: MutableList<Contest>) :
     }
 
     override fun onBindViewHolder(holder: ContestViewHolder, position: Int) {
-        val contest: Contest = contests!![position]
+        val contest: Contest = contests[position]
         holder.apply {
             name.text = contest.name
-            duration.text = getStartTime(contest.durationSeconds)
-            Toast.makeText(itemView.context,"OP BHAI",Toast.LENGTH_SHORT).show()
-//            phase.text = contest.
-            startTime.text = Date(contest.durationSeconds.toLong()).toString()
+            duration.text = contest.durationSeconds?.let { getStartTime(it) }
+            phase.text = contest.phase
+            startTime.text = contest.startTimeSeconds?.let { getStartTime(it) }
         }
     }
 
@@ -48,11 +47,9 @@ class ContestAdapter(private val contests: MutableList<Contest>) :
         if (result.length < 2)
             return "0$result";
         return result
-
     }
-    //suno contest ko not null bnake usmne dummy data daal k dekhe to
 
-    override fun getItemCount()=contests!!.size
+    override fun getItemCount()=contests.size
 
 
 }

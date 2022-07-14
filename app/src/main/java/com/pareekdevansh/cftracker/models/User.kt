@@ -1,20 +1,20 @@
 package com.pareekdevansh.cftracker.models
 
-class User(
-    val handle: String,
-    val email: String,
-    val firstName: String?,
-    val lastName: String?,
-    val country: String?,
-    val city: String?,
+data class User(
+    val avatar: String,
+    val city: String,
     val contribution: Int,
-    val rank: String,
-    val Rating: Int,
+    val country: String,
+    val firstName: String,
+    val friendOfCount: Int,
+    val handle: String,
+    val lastName: String,
+    val lastOnlineTimeSeconds: Int,
     val maxRank: String,
     val maxRating: Int,
-    val lastOnline: Int,
-    val registeredOn: Int,
-    val friendsOf: Int,
-    val avatar: String,
+    val organization: String,
+    val rank: String,
+    val rating: Int,
+    val registrationTimeSeconds: Int,
     val titlePhoto: String
 )

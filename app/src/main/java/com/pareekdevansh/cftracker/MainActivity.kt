@@ -1,23 +1,13 @@
 package com.pareekdevansh.cftracker
 
 import android.os.Bundle
-import android.util.Log
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.pareekdevansh.cftracker.api.CFApi
-import com.pareekdevansh.cftracker.api.RetrofitInstance
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pareekdevansh.cftracker.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.security.Timestamp
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
-
 
 
 }

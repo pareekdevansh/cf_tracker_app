@@ -24,7 +24,6 @@
         android:id="@+id/rvContests"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:scrollbars="vertical"
         tools:listitem="@layout/item_contest"
         app:layout_constraintEnd_toEndOf="parent"
