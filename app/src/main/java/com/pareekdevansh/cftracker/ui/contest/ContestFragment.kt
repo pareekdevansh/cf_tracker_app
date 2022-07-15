@@ -1,12 +1,13 @@
 package com.pareekdevansh.cftracker.ui.contest
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pareekdevansh.cftracker.adapter.ContestAdapter
 import com.pareekdevansh.cftracker.databinding.FragmentContestBinding
@@ -16,10 +17,9 @@ import com.pareekdevansh.cftracker.repository.Repository
 class ContestFragment : Fragment() {
 
     private val TAG = "#ContestFragment"
-    private lateinit var rv: RecyclerView
-    lateinit var contestAdapter: ContestAdapter
+    private lateinit var recyclerView: RecyclerView
     lateinit var contestViewModel: ContestViewModel
-
+    lateinit var contestAdapter: ContestAdapter
     private var _binding: FragmentContestBinding? = null
 
     // This property is only valid between onCreateView and
@@ -45,18 +45,31 @@ class ContestFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rv = binding.rvContests
+        recyclerView = binding.rvContests
+        setupRecyclerView()
+
         contestViewModel.getContest()
         contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
-            Log.d(TAG, "response -> $response")
-            Log.d(TAG, response.body()?.status.toString())
-            Log.d(TAG, response.body()?.contest.toString())
+            if(response.isSuccessful){
+                // update the list showing contests
+                contestAdapter.differ.submitList(response.body()?.contest)
+            }
+            else{
+                // show error message
+                Toast.makeText(requireContext() , "Error Occured", Toast.LENGTH_LONG).show()
+            }
         }
 
 
     }
 
-
+    private fun setupRecyclerView() {
+        contestAdapter = ContestAdapter()
+        recyclerView.apply {
+            adapter = contestAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
+    }
 
 
     override fun onDestroyView() {

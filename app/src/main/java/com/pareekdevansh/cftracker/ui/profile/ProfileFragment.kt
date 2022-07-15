@@ -1,15 +1,17 @@
 package com.pareekdevansh.cftracker.ui.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.pareekdevansh.cftracker.databinding.FragmentProfileBinding
+import com.pareekdevansh.cftracker.models.User
 import com.pareekdevansh.cftracker.repository.Repository
+import java.text.SimpleDateFormat
+import java.util.*
 
 const val TAG = "#ProfileFragment"
 class ProfileFragment : Fragment() {
@@ -44,15 +46,44 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profileViewModel.getUsers()
-        profileViewModel.userResponseModel.observe(viewLifecycleOwner){ userResponse ->
-            if(userResponse.isSuccessful){
-                Log.d(TAG, "userResponse -> $userResponse")
-                Log.d(TAG, userResponse.body()?.status.toString())
-                Log.d(TAG, userResponse.body()?.user.toString())
+        profileViewModel.userResponseModel.observe(viewLifecycleOwner){ response ->
+            if(response.isSuccessful){
+                val user = response.body()?.user?.get(0)
+                if(user != null )
+//                    Log.d("blablabla" , user.toString())
+                    updateCurrentUser(user)
             }
 
         }
     }
+
+    private fun updateCurrentUser(user: User) {
+        binding.apply {
+            contribution.text = "Contribution: " + user.contribution.toString()
+            firstName.text =  user.firstName
+            lastName.text =  user.lastName
+            handle.text = "Handle: " +user.handle
+            rating.text ="Rating: " + user.rating.toString()
+            rank.text = "Rank: " +user.rank
+            maxRating.text = "Max Rating: " +user.maxRating.toString()
+            maxRank.text ="Max Rank: " + user.maxRank
+            city.text = "City: " +user.city
+            country.text = "Country: " +user.country
+            organization.text ="Organization: " + user.organization
+            binding.registrationTimeSeconds.visibility = View.GONE
+//            registrationTimeSeconds.text = "Registered on: " + updateRegistrationTime(user.registrationTimeSeconds) + "months ago"
+            if(user.titlePhoto != null){
+                view?.let { Glide.with(it).load(user.titlePhoto).into(binding.avatar) }
+            }
+
+        }
+    }
+
+//    private fun updateRegistrationTime(registrationTimeSeconds: Int): String {
+//        return registrationTimeSeconds / 36
+//
+//        return sdf.format(timeD)
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

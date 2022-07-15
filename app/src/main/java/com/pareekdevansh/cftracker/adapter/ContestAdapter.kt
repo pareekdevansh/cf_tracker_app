@@ -4,21 +4,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.models.Contest
+import java.text.SimpleDateFormat
 import java.util.*
 
-class ContestAdapter(private val contests: MutableList<Contest>) :
+class ContestAdapter() :
     RecyclerView.Adapter<ContestAdapter.ContestViewHolder>() {
+
     inner class ContestViewHolder(item: View) : RecyclerView.ViewHolder(item) {
         val name: TextView = item.findViewById<TextView>(R.id.name)
         val duration: TextView = item.findViewById<TextView>(R.id.duration)
         val startTime: TextView = item.findViewById<TextView>(R.id.startTime)
-        val phase = item.findViewById<TextView>(R.id.phase)
+        val phase: TextView = item.findViewById<TextView>(R.id.phase)
     }
 
+    private val differCallback = object : DiffUtil.ItemCallback<Contest>() {
+        override fun areItemsTheSame(oldItem: Contest, newItem: Contest): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Contest, newItem: Contest): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+    val differ = AsyncListDiffer(this, differCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContestViewHolder {
         return ContestViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_contest, parent, false)
@@ -26,30 +40,41 @@ class ContestAdapter(private val contests: MutableList<Contest>) :
     }
 
     override fun onBindViewHolder(holder: ContestViewHolder, position: Int) {
-        val contest: Contest = contests[position]
+        val contest: Contest = differ.currentList[position]
         holder.apply {
             name.text = contest.name
-            duration.text = contest.durationSeconds?.let { getStartTime(it) }
+            duration.text = contest.durationSeconds?.let { getDuration(it) }
             phase.text = contest.phase
             startTime.text = contest.startTimeSeconds?.let { getStartTime(it) }
+
         }
     }
 
-    private fun getStartTime(duration: Int): CharSequence {
-        val hour = duration / 3600
-        val minutes = duration / 60 - hour * 60
-        return convertToTwoDigits(hour) + ':' + convertToTwoDigits(minutes)
+    private fun getDuration(it: Int) : String {
+        var minutes = it / 60
+        val hours = minutes / 60
+        minutes -= hours * 60
+        var time  :String = ""
+        if(hours < 9)
+            time += "0"
+        time += hours.toString()
+        time += ':'
+        if(minutes < 9)
+            time += "0"
+        time += minutes.toString()
+        return time
 
     }
 
-    private fun convertToTwoDigits(time: Int): String {
-        val result = time.toString()
-        if (result.length < 2)
-            return "0$result";
-        return result
-    }
+    private fun getStartTime(registrationTimeSeconds: Int): String {
+    val timestamp = registrationTimeSeconds.toLong()
+    val timeD = Date(timestamp * 1000)
+    val sdf = SimpleDateFormat("HH:mm:ss")
 
-    override fun getItemCount()=contests.size
+    return sdf.format(timeD)
+}
+
+override fun getItemCount() = differ.currentList.size
 
 
 }
