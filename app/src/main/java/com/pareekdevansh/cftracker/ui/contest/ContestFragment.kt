@@ -39,18 +39,19 @@ class ContestFragment : Fragment() {
 
         _binding = FragmentContestBinding.inflate(inflater, container, false)
 
-        contestViewModel.getContest()
-        contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
-            Log.d(TAG, "response -> $response")
-            Log.d(TAG, response.body()?.status.toString())
-            Log.d(TAG, response.body()?.contest.toString())
-        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv = binding.rvContests
+        contestViewModel.getContest()
+        contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
+            Log.d(TAG, "response -> $response")
+            Log.d(TAG, response.body()?.status.toString())
+            Log.d(TAG, response.body()?.contest.toString())
+        }
 
 
     }
