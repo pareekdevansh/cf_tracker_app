@@ -1,10 +1,16 @@
 package com.pareekdevansh.cftracker.ui.profile
 
 import android.widget.EditText
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.pareekdevansh.cftracker.R
+import com.pareekdevansh.cftracker.models.RatingChange
+import com.pareekdevansh.cftracker.models.User
 import com.pareekdevansh.cftracker.models.UserRatingResponse
 import com.pareekdevansh.cftracker.models.UserResponseModel
 import com.pareekdevansh.cftracker.repository.Repository
@@ -13,16 +19,28 @@ import retrofit2.Response
 
 class ProfileViewModel(private val repository: Repository) : ViewModel() {
 
-    private var _rankColor: MutableLiveData<Int> = MutableLiveData()
-    private var _maxRankColor: MutableLiveData<Int> = MutableLiveData()
+    companion object{
+        const val CHAR_LEBEL = "Codeforces Rating Curve"
+    }
+    private val _rankColor: MutableLiveData<Int> = MutableLiveData()
+    val rankColor : LiveData<Int> get() = _rankColor
+
+    private val _maxRankColor: MutableLiveData<Int> = MutableLiveData()
+    val maxRankColor : LiveData<Int> get() = _maxRankColor
+
     private val _userRatingResponse : MutableLiveData<Response<UserRatingResponse>> = MutableLiveData()
+    val userRatingResponse :LiveData<Response<UserRatingResponse>> get() = _userRatingResponse
 
-    val userRatingResponse get() = _userRatingResponse
-    val rankColor get() = _rankColor
-    val maxRankColor get() = _maxRankColor
+    private val _userResponseModel = MutableLiveData<Response<UserResponseModel>>()
+    val userResponseModel: LiveData<Response<UserResponseModel>> get() = _userResponseModel
 
+    private val ratingData = mutableListOf<Entry>()
+    private val _lineDataSet = MutableLiveData(LineDataSet(ratingData, CHAR_LEBEL))
+    val lineDataSet : LiveData<LineDataSet> get() = _lineDataSet
     var userQuery: MutableLiveData<EditText> = MutableLiveData()
-    val userResponseModel: MutableLiveData<Response<UserResponseModel>> = MutableLiveData()
+
+
+
     fun getUsers() {
         viewModelScope.launch {
             if (userQuery.toString().isNotEmpty()) {
@@ -31,7 +49,7 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
                 _rankColor.value = response.body()?.user?.get(0)?.let { updateColor(it.rating) }
                 _maxRankColor.value =
                     response.body()?.user?.get(0)?.let { updateColor(it.maxRating) }
-                userResponseModel.value = response
+                _userResponseModel.value = response
             }
         }
     }
@@ -39,7 +57,13 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     fun getUserRatings(){
         viewModelScope.launch {
             val response = repository.getUserRatings("devanshpareek")
-            userRatingResponse.postValue(response)
+            _userRatingResponse.postValue(response)
+            response.body()?.ratingChangeList.let {
+                for(ratingChange in it!!){
+                    ratingData.add(Entry((it.indexOf(ratingChange) +1).toFloat() , ratingChange.newRating.toFloat() , ratingChange))
+                }
+                _lineDataSet.postValue(LineDataSet((ratingData) , CHAR_LEBEL))
+            }
         }
     }
 
