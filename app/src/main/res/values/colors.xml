@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    // color according to ranks @CF
+    <color name="rank_red">#FF0000</color>
+    <color name="rank_yellow">#FFEA00</color>
+    <color name="rank_purple">#A020F0</color>
+    <color name="rank_blue">#0000FF</color>
+    <color name="rank_cyan">#3AB09E</color>
+    <color name="rank_green">#008000</color>
+    <color name="rank_grey">#A9A9A9</color>
 </resources>

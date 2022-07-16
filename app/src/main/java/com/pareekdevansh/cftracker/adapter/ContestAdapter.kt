@@ -69,7 +69,7 @@ class ContestAdapter() :
     private fun getStartTime(registrationTimeSeconds: Int): String {
     val timestamp = registrationTimeSeconds.toLong()
     val timeD = Date(timestamp * 1000)
-    val sdf = SimpleDateFormat("HH:mm:ss")
+    val sdf = SimpleDateFormat("HH:mm:ss dd MMM yyyy")
 
     return sdf.format(timeD)
 }

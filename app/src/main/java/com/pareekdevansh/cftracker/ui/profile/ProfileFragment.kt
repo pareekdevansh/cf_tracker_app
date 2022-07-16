@@ -59,6 +59,28 @@ class ProfileFragment : Fragment() {
 
     private fun updateCurrentUser(user: User) {
         binding.apply {
+            updateTextFieldData(user)
+            updateTextFieldColor()
+            // updating profile picture
+            if(user.titlePhoto != null){
+                view?.let { Glide.with(it).load(user.titlePhoto).into(binding.avatar) }
+            }
+
+        }
+    }
+
+    private fun updateTextFieldColor() {
+        binding.apply {
+            profileViewModel.rankColor.value?.let { firstName.setTextColor(it) }
+            profileViewModel.rankColor.value?.let { lastName.setTextColor(it) }
+            profileViewModel.rankColor.value?.let { handle.setTextColor(it) }
+            profileViewModel.maxRankColor.value?.let { maxRank.setTextColor(it) }
+            profileViewModel.maxRankColor.value?.let { maxRating.setTextColor(it) }
+        }
+    }
+
+    private fun updateTextFieldData(user: User) {
+        binding.apply {
             contribution.text = "Contribution: " + user.contribution.toString()
             firstName.text =  user.firstName
             lastName.text =  user.lastName
@@ -70,20 +92,9 @@ class ProfileFragment : Fragment() {
             city.text = "City: " +user.city
             country.text = "Country: " +user.country
             organization.text ="Organization: " + user.organization
-            binding.registrationTimeSeconds.visibility = View.GONE
-//            registrationTimeSeconds.text = "Registered on: " + updateRegistrationTime(user.registrationTimeSeconds) + "months ago"
-            if(user.titlePhoto != null){
-                view?.let { Glide.with(it).load(user.titlePhoto).into(binding.avatar) }
-            }
-
+            registrationTimeSeconds.visibility = View.GONE
         }
     }
-
-//    private fun updateRegistrationTime(registrationTimeSeconds: Int): String {
-//        return registrationTimeSeconds / 36
-//
-//        return sdf.format(timeD)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
