@@ -61,16 +61,17 @@ class ContestFragment : Fragment() {
         contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
             if(response.isSuccessful){
                 // update live contests
-                val liveContest = response.body()?.contest?.filter { it.phase == "LIVE"  }
-                if(liveContest == null ){
 
+                val liveContest = response.body()?.contest?.filter { it.phase == "CODING" }
+                if(liveContest == null ){
+                    // no live contest now
                 }
                 else{
                     liveContestAdapter.differ.submitList(liveContest)
                 }
 
                 // update recent contests
-                val recentContests = response.body()?.contest?.filter { it.phase == "FINISHED" && (it.relativeTimeSeconds?.let { time -> time <= 24 * 7 * 60 * 60 } == true)  }
+                val recentContests = response.body()?.contest?.filter {( it.phase == "FINISHED" || it.phase == "SYSTEM_TEST" || it.phase == "PENDING_SYSTEM_TEST") && (it.relativeTimeSeconds?.let { time -> time <= 24 * 7 * 60 * 60 } == true)  }
                 if(recentContests == null )
                 {
                     // there are no recent contests

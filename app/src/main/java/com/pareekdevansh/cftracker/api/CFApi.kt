@@ -2,6 +2,7 @@ package com.pareekdevansh.cftracker.api
 
 import com.pareekdevansh.cftracker.models.ContestResponseModel
 import com.pareekdevansh.cftracker.models.RatingChangeResponse
+import com.pareekdevansh.cftracker.models.UserRatingResponse
 import com.pareekdevansh.cftracker.models.UserResponseModel
 import retrofit2.Response
 import retrofit2.http.GET
@@ -21,4 +22,10 @@ interface CFApi {
     suspend fun getRatingChanges(
         @Query("contestId") contestID : Int
     ) : Response<RatingChangeResponse>
+
+    // list of all the rated contests given by user
+    @GET("user.rating")
+    suspend fun getUserRatings(
+        @Query("handle") userHandle : String
+    ) : Response<UserRatingResponse>
 }

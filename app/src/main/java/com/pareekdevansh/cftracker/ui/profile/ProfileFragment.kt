@@ -1,6 +1,7 @@
 package com.pareekdevansh.cftracker.ui.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,15 +47,23 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profileViewModel.getUsers()
+        profileViewModel.getUserRatings()
+
         profileViewModel.userResponseModel.observe(viewLifecycleOwner){ response ->
             if(response.isSuccessful){
                 val user = response.body()?.user?.get(0)
                 if(user != null )
-//                    Log.d("blablabla" , user.toString())
                     updateCurrentUser(user)
             }
 
         }
+
+        profileViewModel.userRatingResponse.observe(viewLifecycleOwner){ response ->
+            if(response.isSuccessful){
+                Log.d(tag , response.body().toString())
+            }
+        }
+
     }
 
     private fun updateCurrentUser(user: User) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pareekdevansh.cftracker.R
+import com.pareekdevansh.cftracker.models.UserRatingResponse
 import com.pareekdevansh.cftracker.models.UserResponseModel
 import com.pareekdevansh.cftracker.repository.Repository
 import kotlinx.coroutines.launch
@@ -14,8 +15,12 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
 
     private var _rankColor: MutableLiveData<Int> = MutableLiveData()
     private var _maxRankColor: MutableLiveData<Int> = MutableLiveData()
+    private val _userRatingResponse : MutableLiveData<Response<UserRatingResponse>> = MutableLiveData()
+
+    val userRatingResponse get() = _userRatingResponse
     val rankColor get() = _rankColor
     val maxRankColor get() = _maxRankColor
+
     var userQuery: MutableLiveData<EditText> = MutableLiveData()
     val userResponseModel: MutableLiveData<Response<UserResponseModel>> = MutableLiveData()
     fun getUsers() {
@@ -28,6 +33,13 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
                     response.body()?.user?.get(0)?.let { updateColor(it.maxRating) }
                 userResponseModel.value = response
             }
+        }
+    }
+
+    fun getUserRatings(){
+        viewModelScope.launch {
+            val response = repository.getUserRatings("devanshpareek")
+            userRatingResponse.postValue(response)
         }
     }
 
