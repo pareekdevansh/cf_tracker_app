@@ -1,6 +1,7 @@
 package com.pareekdevansh.cftracker.ui.contest
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +13,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pareekdevansh.cftracker.adapter.ContestAdapter
 import com.pareekdevansh.cftracker.databinding.FragmentContestBinding
 import com.pareekdevansh.cftracker.repository.Repository
+import kotlin.math.abs
 
 
 class ContestFragment : Fragment() {
 
     private val TAG = "#ContestFragment"
-    private lateinit var recyclerView: RecyclerView
     lateinit var contestViewModel: ContestViewModel
-    lateinit var contestAdapter: ContestAdapter
+    lateinit var liveContestAdapter: ContestAdapter
+    lateinit var recentContestAdapter: ContestAdapter
+    lateinit var upcomingContestAdapter: ContestAdapter
+    lateinit var rvLiveContest : RecyclerView
+    lateinit var rvRecentContest : RecyclerView
+    lateinit var rvUpcomingContest : RecyclerView
     private var _binding: FragmentContestBinding? = null
 
     // This property is only valid between onCreateView and
@@ -45,28 +51,92 @@ class ContestFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = binding.rvContests
+        rvLiveContest = binding.rvLiveContest
+        rvRecentContest = binding.rvRecentContest
+        rvUpcomingContest = binding.rvUpcomingContest
+
         setupRecyclerView()
 
         contestViewModel.getContest()
         contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
             if(response.isSuccessful){
-                // update the list showing contests
-                contestAdapter.differ.submitList(response.body()?.contest)
+                // update live contests
+                val liveContest = response.body()?.contest?.filter { it.phase == "LIVE"  }
+                if(liveContest == null ){
+
+                }
+                else{
+                    liveContestAdapter.differ.submitList(liveContest)
+                }
+
+                // update recent contests
+                val recentContests = response.body()?.contest?.filter { it.phase == "FINISHED" && (it.relativeTimeSeconds?.let { time -> time <= 24 * 7 * 60 * 60 } == true)  }
+                if(recentContests == null )
+                {
+                    // there are no recent contests
+                }
+                else{
+                    recentContestAdapter.differ.submitList(recentContests)
+                }
+
+                // update upcoming contests
+                val upcomingContests = response.body()?.contest?.filter { it.phase == "BEFORE" && (it.relativeTimeSeconds?.let { time -> abs(time) <= 24 * 7 * 60 * 60 } == true) }
+                if(upcomingContests == null ){
+                    // no upcoming contests
+                }
+                else{
+                    upcomingContestAdapter.differ.submitList(upcomingContests.asReversed())
+                }
             }
             else{
-                // show error message
-                Toast.makeText(requireContext() , "Error Occured", Toast.LENGTH_LONG).show()
+                showToast(response.message())
             }
+        }
+
+        contestViewModel.ratingChangeResponse.observe(viewLifecycleOwner){ response ->
+            if(response.isSuccessful){
+                Log.d("blablabla" , response.toString())
+                Log.d("blablabla", response.body().toString())
+            }
+            else{
+                showToast(response.message())
+            }
+
         }
 
 
     }
 
+    private fun showToast(error: String) {
+        Toast.makeText(requireContext()  , error , Toast.LENGTH_LONG ).show()
+    }
+
     private fun setupRecyclerView() {
-        contestAdapter = ContestAdapter()
-        recyclerView.apply {
-            adapter = contestAdapter
+        showLiveContest()
+        showRecentContest()
+        showUpcomingContest()
+    }
+
+    private fun showUpcomingContest() {
+        upcomingContestAdapter = ContestAdapter()
+        binding.rvUpcomingContest.apply {
+            adapter = upcomingContestAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
+    }
+
+    private fun showRecentContest() {
+        recentContestAdapter = ContestAdapter()
+        binding.rvRecentContest.apply {
+            adapter = recentContestAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
+    }
+
+    private fun showLiveContest() {
+        liveContestAdapter = ContestAdapter()
+        binding.rvLiveContest.apply {
+            adapter = liveContestAdapter
             layoutManager = LinearLayoutManager(activity)
         }
     }

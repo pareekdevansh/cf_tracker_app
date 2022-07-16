@@ -62,6 +62,7 @@ class ContestAdapter() :
         if(minutes < 9)
             time += "0"
         time += minutes.toString()
+        time += " hrs"
         return time
 
     }
@@ -69,7 +70,7 @@ class ContestAdapter() :
     private fun getStartTime(registrationTimeSeconds: Int): String {
     val timestamp = registrationTimeSeconds.toLong()
     val timeD = Date(timestamp * 1000)
-    val sdf = SimpleDateFormat("HH:mm:ss dd MMM yyyy")
+    val sdf = SimpleDateFormat("dd MMM yyyy HH:mm:ss ")
 
     return sdf.format(timeD)
 }

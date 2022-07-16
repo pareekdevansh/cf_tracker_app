@@ -32,23 +32,6 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-//        getContestList()
-//        getUser()
     }
-
-//    private fun getUser() {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val response =  RetrofitInstance.api.searchUser(listOf("sumit"))
-//                if (response.isSuccessful){
-//                    Log.d("user" , response.body().toString())
-//                }
-//            }
-//            catch (e  :Exception ) {
-//                Log.d("user", e.message.toString())
-//            }
-//        }
-//    }
-
 
 }

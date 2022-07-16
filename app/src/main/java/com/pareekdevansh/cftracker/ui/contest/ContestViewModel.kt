@@ -1,27 +1,35 @@
 package com.pareekdevansh.cftracker.ui.contest
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pareekdevansh.cftracker.api.RetrofitInstance
 import com.pareekdevansh.cftracker.models.Contest
 import com.pareekdevansh.cftracker.models.ContestResponseModel
+import com.pareekdevansh.cftracker.models.RatingChangeResponse
 import com.pareekdevansh.cftracker.repository.Repository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Response
+import kotlin.math.abs
 
 class ContestViewModel(private val repository: Repository) : ViewModel() {
 
-    val contestResponse : MutableLiveData<Response<ContestResponseModel>> = MutableLiveData()
+    private val sevenDays = 24 * 7*  60 * 60
+    val tag = "checking"
+    private val _contestResponse : MutableLiveData<Response<ContestResponseModel>> = MutableLiveData()
+    val contestResponse : MutableLiveData<Response<ContestResponseModel>> get() = _contestResponse
+    val ratingChangeResponse : MutableLiveData<Response<RatingChangeResponse>> = MutableLiveData()
+
     fun getContest() {
         viewModelScope.launch {
             val response = repository.getContest()
-            contestResponse.value = response
+            _contestResponse.postValue(response)
+        }
+    }
+
+    fun getRatingChanges(){
+        viewModelScope.launch {
+            val response = repository.getRatingChange(1702)
+            ratingChangeResponse.postValue(response)
         }
     }
 
