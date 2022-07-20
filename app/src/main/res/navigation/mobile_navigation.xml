@@ -10,17 +10,32 @@
         android:id="@+id/navigation_contest"
         android:name="com.pareekdevansh.cftracker.ui.contest.ContestFragment"
         android:label="@string/title_contest"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_contest" />
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.pareekdevansh.cftracker.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_contest" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_userSearchResultFragment"
+            app:destination="@id/userSearchResultFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.pareekdevansh.cftracker.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/userSearchResultFragment"
+        android:name="com.pareekdevansh.cftracker.ui.result.usersearchresult.UserSearchResultFragment"
+        android:label="User Search"
+        tools:layout="@layout/fragment_user_search_result" >
+
+        <argument
+            android:name="userId"
+            app:argType="string"
+            app:nullable="true"/>
+    </fragment>
 </navigation>

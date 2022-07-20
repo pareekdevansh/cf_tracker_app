@@ -1,5 +1,9 @@
 package com.pareekdevansh.cftracker.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class User(
     val avatar: String?,
     val city: String?,
@@ -17,4 +21,4 @@ data class User(
     val rating: Int,
     val registrationTimeSeconds: Int,
     val titlePhoto: String?
-)
+) : Parcelable

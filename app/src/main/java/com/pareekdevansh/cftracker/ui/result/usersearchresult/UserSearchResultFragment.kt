@@ -1,50 +1,57 @@
-package com.pareekdevansh.cftracker.ui.profile
+package com.pareekdevansh.cftracker.ui.result.usersearchresult
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.EditText
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
-import com.pareekdevansh.cftracker.databinding.FragmentProfileBinding
+import com.github.mikephil.charting.data.LineDataSet
+import com.pareekdevansh.cftracker.R
+import com.pareekdevansh.cftracker.databinding.FragmentUserSearchResultBinding
 import com.pareekdevansh.cftracker.models.User
+import com.pareekdevansh.cftracker.models.UserRatingResponse
+import com.pareekdevansh.cftracker.models.UserResponseModel
 import com.pareekdevansh.cftracker.repository.Repository
+import kotlinx.coroutines.NonDisposableHandle.parent
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
+class UserSearchResultFragment : Fragment() {
 
-class ProfileFragment : Fragment() {
-
-    private var _binding: FragmentProfileBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-    lateinit var profileViewModel: ProfileViewModel
+    private val args: UserSearchResultFragmentArgs by navArgs()
+    private var _binding: FragmentUserSearchResultBinding? = null
+    val binding get() = _binding!!
+    lateinit var userSearchResultViewModel: UserSearchResultViewModel
     val repository = Repository()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val profileViewModelFactory =
-            ProfileViewModelFactory(repository)
-        profileViewModel =
-            ViewModelProvider(this, profileViewModelFactory)[ProfileViewModel::class.java]
-
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+    ): View? {
+        val userSearchResultViewModelFactory = UserSearchResultViewModelFactory(repository)
+        userSearchResultViewModel = ViewModelProvider(this , userSearchResultViewModelFactory)[UserSearchResultViewModel::class.java]
+        // Inflate the layout for this fragment
+        _binding = FragmentUserSearchResultBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        profileViewModel.getUsers()
-        profileViewModel.getUserRatings()
+        args.userId?.let { userSearchResultViewModel.getUsers(it) }
+        args.userId?.let { userSearchResultViewModel.getUserRatings(it) }
 
-        profileViewModel.userResponseModel.observe(viewLifecycleOwner) { response ->
+        userSearchResultViewModel.userResponseModel.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
                 val user = response.body()?.user?.get(0)
                 if (user != null)
@@ -52,13 +59,13 @@ class ProfileFragment : Fragment() {
             }
 
         }
-        profileViewModel.lineDataSet.observe(viewLifecycleOwner){
+        userSearchResultViewModel.lineDataSet.observe(viewLifecycleOwner){
             binding.lineChart.data = LineData(it)
             binding.lineChart.invalidate()
             makeGraphPrettier()
         }
 
-        profileViewModel.userRatingResponse.observe(viewLifecycleOwner)
+        userSearchResultViewModel.userRatingResponse.observe(viewLifecycleOwner)
         { response ->
             if (response.isSuccessful) {
                 Log.d(tag, response.body().toString())
@@ -105,11 +112,11 @@ class ProfileFragment : Fragment() {
 
     private fun updateTextFieldColor() {
         binding.apply {
-            profileViewModel.rankColor.value?.let { firstName.setTextColor(it) }
-            profileViewModel.rankColor.value?.let { lastName.setTextColor(it) }
-            profileViewModel.rankColor.value?.let { handle.setTextColor(it) }
-            profileViewModel.maxRankColor.value?.let { maxRank.setTextColor(it) }
-            profileViewModel.maxRankColor.value?.let { maxRating.setTextColor(it) }
+            userSearchResultViewModel.rankColor.value?.let { firstName.setTextColor(it) }
+            userSearchResultViewModel.rankColor.value?.let { lastName.setTextColor(it) }
+            userSearchResultViewModel.rankColor.value?.let { handle.setTextColor(it) }
+            userSearchResultViewModel.maxRankColor.value?.let { maxRank.setTextColor(it) }
+            userSearchResultViewModel.maxRankColor.value?.let { maxRating.setTextColor(it) }
         }
     }
 

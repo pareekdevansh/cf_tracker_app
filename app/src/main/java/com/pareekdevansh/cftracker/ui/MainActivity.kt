@@ -1,4 +1,4 @@
-package com.pareekdevansh.cftracker
+package com.pareekdevansh.cftracker.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
