@@ -1,5 +1,6 @@
 package com.pareekdevansh.cftracker.ui.profile
 
+import android.util.Log
 import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,10 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.pareekdevansh.cftracker.R
-import com.pareekdevansh.cftracker.models.UserRatingResponse
-import com.pareekdevansh.cftracker.models.UserResponseModel
+import com.pareekdevansh.cftracker.models.*
 import com.pareekdevansh.cftracker.repository.Repository
 import kotlinx.coroutines.launch
 import retrofit2.Response
@@ -38,6 +37,8 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     val lineDataSet : LiveData<LineDataSet> get() = _lineDataSet
     var userQuery: MutableLiveData<EditText> = MutableLiveData()
 
+    private var _submissionResponse : MutableLiveData<Response<SubmissionsResponse>> = MutableLiveData()
+    val submissionsResponse : LiveData<Response<SubmissionsResponse>> get() = _submissionResponse
 
 
     fun getUsers() {
@@ -59,11 +60,22 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
             _userRatingResponse.postValue(response)
             response.body()?.ratingChangeList.let {
                 for(ratingChange in it!!){
-                    ratingData.add(Entry((it.indexOf(ratingChange) +1).toFloat() , ratingChange.newRating.toFloat() , ratingChange))
+                    ratingData.add(Entry((it.indexOf(ratingChange) +1).toFloat() , ratingChange.newRating.toFloat() , ratingChange.contestName))
                 }
+
                 _lineDataSet.postValue(LineDataSet((ratingData) , CHAR_LEBEL))
             }
         }
+    }
+
+    fun getSubmissionsList(userId : String){
+        viewModelScope.launch {
+            val response = repository.getSubmissionsList(userId)
+            if(response.isSuccessful){
+                _submissionResponse.postValue(response)
+            }
+        }
+
     }
 
     // updating color of the views according to rating of the user

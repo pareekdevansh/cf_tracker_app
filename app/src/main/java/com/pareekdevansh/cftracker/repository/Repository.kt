@@ -2,10 +2,7 @@ package com.pareekdevansh.cftracker.repository
 
 import com.pareekdevansh.cftracker.api.CFApi
 import com.pareekdevansh.cftracker.api.RetrofitInstance
-import com.pareekdevansh.cftracker.models.ContestResponseModel
-import com.pareekdevansh.cftracker.models.RatingChangeResponse
-import com.pareekdevansh.cftracker.models.UserRatingResponse
-import com.pareekdevansh.cftracker.models.UserResponseModel
+import com.pareekdevansh.cftracker.models.*
 import retrofit2.Response
 
 class Repository {
@@ -24,5 +21,9 @@ class Repository {
 
     suspend fun getUserRatings(userHandle :String ) : Response<UserRatingResponse>{
         return cfApi.getUserRatings(userHandle)
+    }
+
+    suspend fun getSubmissionsList(userHandle: String) : Response<SubmissionsResponse>{
+        return cfApi.getSubmissionsList(userHandle)
     }
 }

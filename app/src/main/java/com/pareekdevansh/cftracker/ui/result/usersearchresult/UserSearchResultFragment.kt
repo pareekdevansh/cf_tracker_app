@@ -54,14 +54,19 @@ class UserSearchResultFragment : Fragment() {
         userSearchResultViewModel.userResponseModel.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
                 val user = response.body()?.user?.get(0)
-                if (user != null)
+                if (user != null) {
+                    binding.loadingAnimation.apply {
+                        pauseAnimation()
+                        visibility = View.GONE
+                    }
                     updateCurrentUser(user)
+                }
             }
 
         }
         userSearchResultViewModel.lineDataSet.observe(viewLifecycleOwner){
-            binding.lineChart.data = LineData(it)
-            binding.lineChart.invalidate()
+            binding.ratingCurve.data = LineData(it)
+            binding.ratingCurve.invalidate()
             makeGraphPrettier()
         }
 
@@ -75,7 +80,7 @@ class UserSearchResultFragment : Fragment() {
     }
 
     private fun makeGraphPrettier() {
-        binding.lineChart.apply {
+        binding.ratingCurve.apply {
             axisRight.isEnabled = false
 //            axisLeft.apply {
 //                isEnabled =false

@@ -1,9 +1,6 @@
 package com.pareekdevansh.cftracker.api
 
-import com.pareekdevansh.cftracker.models.ContestResponseModel
-import com.pareekdevansh.cftracker.models.RatingChangeResponse
-import com.pareekdevansh.cftracker.models.UserRatingResponse
-import com.pareekdevansh.cftracker.models.UserResponseModel
+import com.pareekdevansh.cftracker.models.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -28,4 +25,10 @@ interface CFApi {
     suspend fun getUserRatings(
         @Query("handle") userHandle : String
     ) : Response<UserRatingResponse>
+
+    @GET("user.status")
+    suspend fun getSubmissionsList(
+        @Query("handle") userHandle: String
+    ) : Response<SubmissionsResponse>
+
 }

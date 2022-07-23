@@ -61,7 +61,8 @@ class ContestFragment : Fragment() {
         contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
             if(response.isSuccessful){
                 // update live contests
-
+                binding.loadingAnimation.pauseAnimation()
+                binding.loadingAnimation.visibility = View.GONE
                 val liveContest = response.body()?.contest?.filter { it.phase == "CODING" }
                 if(liveContest == null ){
                     // no live contest now
