@@ -1,5 +1,6 @@
 package com.pareekdevansh.cftracker.ui.profile
 
+import android.R
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -9,21 +10,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.google.android.material.color.MaterialColors
-import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.databinding.FragmentProfileBinding
 import com.pareekdevansh.cftracker.models.Submission
 import com.pareekdevansh.cftracker.models.User
 import com.pareekdevansh.cftracker.repository.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ProfileFragment : Fragment() {
@@ -53,12 +51,12 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var problemList: MutableSet<String> = mutableSetOf()
-        var problemIndexes: MutableMap<String, Int> = mutableMapOf()
-        var problemTags: MutableMap<String, Int> = mutableMapOf()
-        var problemRatings: MutableMap<Int, Int> = mutableMapOf()
-        var submissionLanguage: MutableMap<String, Int> = mutableMapOf()
-        var submissionVerdict: MutableMap<String, Int> = mutableMapOf()
+        val problemList: MutableSet<String> = mutableSetOf()
+        val problemIndexes: MutableMap<String, Int> = mutableMapOf()
+        val problemTags: MutableMap<String, Int> = mutableMapOf()
+        val problemRatings: MutableMap<Int, Int> = mutableMapOf()
+        val submissionLanguage: MutableMap<String, Int> = mutableMapOf()
+        val submissionVerdict: MutableMap<String, Int> = mutableMapOf()
 
 
         profileViewModel.getUsers()
@@ -79,57 +77,65 @@ class ProfileFragment : Fragment() {
 
             }
         }
-        profileViewModel.lineDataSet.observe(viewLifecycleOwner) {
-            binding.ratingCurve.data = LineData(it)
-            binding.ratingCurve.invalidate()
-            makeGraphPrettier()
-        }
+
         profileViewModel.submissionsResponse.observe(viewLifecycleOwner) { response ->
             response.body()?.let {
 
-                for (submission: Submission in it.submissions) {
-                    if (!submissionLanguage.containsKey(submission.programmingLanguage))
-                        submissionLanguage[submission.programmingLanguage] = 0
-                    else
-                        submissionLanguage[submission.programmingLanguage] =
-                            submissionLanguage[submission.programmingLanguage]!! + 1
+                CoroutineScope(Dispatchers.IO).launch {
 
-                    if (!submissionVerdict.containsKey(submission.verdict))
-                        submissionVerdict[submission.verdict] = 0
-                    else
-                        submissionVerdict[submission.verdict] =
-                            submissionVerdict[submission.verdict]!! + 1
+                    for (submission: Submission in it.submissions) {
+                        if (!submissionLanguage.containsKey(submission.programmingLanguage))
+                            submissionLanguage[submission.programmingLanguage] = 0
+                        else
+                            submissionLanguage[submission.programmingLanguage] =
+                                submissionLanguage[submission.programmingLanguage]!! + 1
 
-
-                    if (submission.verdict == "OK") {
-                        if (!problemList.contains(submission.problem.name)) {
-                            problemList.add(submission.problem.name)
-                            val problem = submission.problem
-                            if (!problemIndexes.containsKey(problem.index))
-                                problemIndexes[problem.index] = 0
-                            else
-                                problemIndexes[problem.index] = problemIndexes[problem.index]!! + 1
+                        if (!submissionVerdict.containsKey(submission.verdict))
+                            submissionVerdict[submission.verdict] = 0
+                        else
+                            submissionVerdict[submission.verdict] =
+                                submissionVerdict[submission.verdict]!! + 1
 
 
-                            if (!problemRatings.containsKey(problem.rating))
-                                problemRatings[problem.rating] = 0
-                            else
-                                problemRatings[problem.rating] =
-                                    problemRatings[problem.rating]!! + 1
-
-                            for (tag in problem.tags) {
-                                if (!problemTags.containsKey(tag))
-                                    problemTags[tag] = 0
+                        if (submission.verdict == "OK") {
+                            if (!problemList.contains(submission.problem.name)) {
+                                problemList.add(submission.problem.name)
+                                val problem = submission.problem
+                                if (!problemIndexes.containsKey(problem.index))
+                                    problemIndexes[problem.index] = 1
                                 else
-                                    problemTags[tag] = problemTags[tag]!! + 1
+                                    problemIndexes[problem.index] =
+                                        problemIndexes[problem.index]!! + 1
+
+
+                                if (!problemRatings.containsKey(problem.rating))
+                                    problemRatings[problem.rating] = 1
+                                else
+                                    problemRatings[problem.rating] =
+                                        problemRatings[problem.rating]!! + 1
+
+                                for (tag in problem.tags) {
+                                    if (!problemTags.containsKey(tag))
+                                        problemTags[tag] = 1
+                                    else
+                                        problemTags[tag] = problemTags[tag]!! + 1
+                                }
                             }
                         }
                     }
+                    withContext(Dispatchers.Main){
+                        profileViewModel.lineDataSet.observe(viewLifecycleOwner) {
+                            binding.ratingCurve.data = LineData(it)
+                            binding.ratingCurve.invalidate()
+                            makeGraphPrettier()
+                        }
+                        prepareRatingTable(problemRatings)
+                        prepareLevelTable(problemIndexes)
+                        prepareLanguageChart(submissionLanguage)
+                        prepareTagsChart(problemTags)
+                        prepareVerdictsChart(submissionVerdict)
+                    }
                 }
-                prepareRatingTable(problemRatings)
-                val ch = 'A'
-                Log.d("oblabla", "${ch.code.toFloat().toString()}")
-                prepareLevelTable(problemIndexes)
 
             }
 
@@ -138,14 +144,87 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun prepareVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
+        val entries : MutableList<PieEntry> = mutableListOf()
+        for(item in submissionVerdict){
+            entries.add(PieEntry(item.value.toFloat(), item.key) )
+        }
+        val pieDataSet = PieDataSet(entries , "Submission Verdicts")
+        pieDataSet.apply {
+            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+        }
+        val pieData = PieData(pieDataSet)
+        binding.pieChartVerdicts.apply {
+
+            description = null
+            isDrawHoleEnabled = true
+            setEntryLabelTextSize(12f)
+            setEntryLabelColor(R.color.black)
+            centerText = "Languages used"
+            setCenterTextSize(24f)
+            data = pieData
+            invalidate()
+            animateY(2000, Easing.EaseInCirc)
+        }
+    }
+
+    private fun prepareTagsChart(problemTags: MutableMap<String, Int>) {
+        val entries : MutableList<PieEntry> = mutableListOf()
+        for(item in problemTags){
+            entries.add(PieEntry(item.value.toFloat(), item.key) )
+        }
+        val pieDataSet = PieDataSet(entries , "Problem Tags")
+        pieDataSet.apply {
+            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+        }
+        val pieData = PieData(pieDataSet)
+        binding.pieChartTags.apply {
+
+            description = null
+            isDrawHoleEnabled = true
+            setDrawEntryLabels(true)
+            setEntryLabelTextSize(12f)
+            setEntryLabelColor(R.color.black)
+            centerText = "Languages used"
+            setCenterTextSize(24f)
+            data = pieData
+            invalidate()
+            animateY(2000, Easing.EaseInCirc)
+        }
+    }
+
+    private fun prepareLanguageChart(submissionLanguage: MutableMap<String, Int>) {
+        val entries : MutableList<PieEntry> = mutableListOf()
+        for(item in submissionLanguage){
+            entries.add(PieEntry(item.value.toFloat(), item.key) )
+        }
+        val pieDataSet = PieDataSet(entries , "Submission Languages")
+        pieDataSet.apply {
+            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+        }
+        val pieData = PieData(pieDataSet)
+        binding.pieChartLanguage.apply {
+            description = null
+            isDrawHoleEnabled = true
+            setEntryLabelTextSize(12f)
+            setEntryLabelColor(R.color.black)
+            centerText = "Languages used"
+            setCenterTextSize(24f)
+            data = pieData
+            invalidate()
+            animateY(2000, Easing.EaseInCirc)
+        }
+
+    }
+
     private fun prepareLevelTable(problemIndexes: MutableMap<String, Int>) {
         val entries: MutableList<BarEntry> = mutableListOf()
-        val xentries : MutableList<String> = mutableListOf()
+        val xentries: MutableList<String> = mutableListOf()
 
         var count = 0
         for (item in problemIndexes.toSortedMap()) {
-            Log.d("oblabla" , count.toString())
-            if(item.value != 0 ) {
+            Log.d("oblabla", count.toString())
+            if (item.value != 0) {
                 count++
                 entries.add(BarEntry(count.toFloat(), item.value.toFloat()))
                 xentries.add(item.key)
@@ -160,7 +239,6 @@ class ProfileFragment : Fragment() {
         }
         val barData = BarData(barDataSet)
         binding.levelTable.apply {
-            invalidate()
             axisRight.isEnabled = false
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
@@ -168,17 +246,18 @@ class ProfileFragment : Fragment() {
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
             }
-            data = barData
             animateXY(2000, 2000)
             description = null
+            data = barData
+            invalidate()
         }
     }
 
     private fun prepareRatingTable(problemRatings: MutableMap<Int, Int>) {
         val entries: MutableList<BarEntry> = mutableListOf()
         for (item in problemRatings.toSortedMap()) {
-            if(item.key >= 800 && item.value > 0 )
-            entries.add(BarEntry((item.key / 100).toFloat(), item.value.toFloat()))
+            if (item.key >= 800 && item.value > 0)
+                entries.add(BarEntry((item.key / 100).toFloat(), item.value.toFloat()))
         }
         Log.d("oblabla", entries.toString())
         val barDataSet = BarDataSet(entries, "Problem Ratings / 100")
@@ -189,7 +268,6 @@ class ProfileFragment : Fragment() {
         }
         val barData = BarData(barDataSet)
         binding.ratingTable.apply {
-            invalidate()
             axisRight.isEnabled = false
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
@@ -197,8 +275,9 @@ class ProfileFragment : Fragment() {
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
             }
-            data = barData
             animateXY(2000, 2000)
+            data = barData
+            invalidate()
         }
 
     }
