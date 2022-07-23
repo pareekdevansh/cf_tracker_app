@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.pareekdevansh.cftracker.R
+import com.pareekdevansh.cftracker.models.SubmissionsResponse
 import com.pareekdevansh.cftracker.models.UserRatingResponse
 import com.pareekdevansh.cftracker.models.UserResponseModel
 import com.pareekdevansh.cftracker.repository.Repository
@@ -15,10 +16,20 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class UserSearchResultViewModel(private val repository: Repository) : ViewModel() {
-
     companion object {
-        const val CHAR_LEBEL = "Codeforces Rating Curve"
+        const val CHAR_LABEL = "Codeforces Rating Curve"
     }
+
+    private var _minRatingChange = 0
+    private var _maxRatingChange = 0
+    private var _worstRank = 0
+    private var _bestRank = 1e5.toInt()
+    private var _contestGiven = 0
+    val minRatingChange get() = _minRatingChange
+    val maxRatingChange get() = _maxRatingChange
+    val worstRank get() = _worstRank
+    val bestRank get() = _bestRank
+    val contestGiven get() = _contestGiven
 
     private val _rankColor: MutableLiveData<Int> = MutableLiveData()
     val rankColor: LiveData<Int> get() = _rankColor
@@ -34,16 +45,25 @@ class UserSearchResultViewModel(private val repository: Repository) : ViewModel(
     val userResponseModel: LiveData<Response<UserResponseModel>> get() = _userResponseModel
 
     private val ratingData = mutableListOf<Entry>()
-    private val _lineDataSet = MutableLiveData(LineDataSet(ratingData, CHAR_LEBEL))
+    private val _lineDataSet = MutableLiveData(LineDataSet(ratingData, CHAR_LABEL))
     val lineDataSet: LiveData<LineDataSet> get() = _lineDataSet
     var userQuery: MutableLiveData<EditText> = MutableLiveData()
 
+    private var _submissionResponse: MutableLiveData<Response<SubmissionsResponse>> =
+        MutableLiveData()
+    val submissionsResponse: LiveData<Response<SubmissionsResponse>> get() = _submissionResponse
 
-    fun getUsers(userId : String) {
+    private var _userNotFound : MutableLiveData<Boolean> = MutableLiveData()
+    val userNotFound get() = _userNotFound
+
+    fun getUsers(userId: String) {
         viewModelScope.launch {
             if (userQuery.toString().isNotEmpty()) {
                 val response = repository.getUser(listOf(userId))
 //                val response = repository.getUser(listOf(userQuery.toString()))
+                if(response.body()?.user == null ){
+                    userNotFound.postValue(true)
+                }
                 _rankColor.value = response.body()?.user?.get(0)?.let { updateColor(it.rating) }
                 _maxRankColor.value =
                     response.body()?.user?.get(0)?.let { updateColor(it.maxRating) }
@@ -52,29 +72,48 @@ class UserSearchResultViewModel(private val repository: Repository) : ViewModel(
         }
     }
 
-    fun getUserRatings( userId :String) {
+    fun getUserRatings(userId: String) {
         viewModelScope.launch {
             val response = repository.getUserRatings(userId)
             _userRatingResponse.postValue(response)
-            response.body()?.ratingChangeList?.let {
-                for (ratingChange in it) {
+            response.body()?.ratingChangeList.let {
+                if (it != null)
+                    _contestGiven = it.size
+                for (ratingChange in it!!) {
+                    val rank = ratingChange.rank
+                    val delta = ratingChange.newRating - ratingChange.oldRating
+                    _minRatingChange = Integer.min(_minRatingChange, delta)
+                    _maxRatingChange = _maxRatingChange.coerceAtLeast(delta)
+                    _bestRank = Integer.min(_bestRank, rank)
+                    _worstRank = _worstRank.coerceAtLeast(rank)
+
                     ratingData.add(
                         Entry(
                             (it.indexOf(ratingChange) + 1).toFloat(),
-                            ratingChange.newRating.toFloat(),
-                            ratingChange
+                            ratingChange.newRating.toFloat()
                         )
                     )
                 }
-                _lineDataSet.postValue(LineDataSet((ratingData), CHAR_LEBEL))
+
+                _lineDataSet.postValue(LineDataSet((ratingData), CHAR_LABEL))
             }
         }
+    }
+
+    fun getSubmissionsList(userId: String) {
+        viewModelScope.launch {
+            val response = repository.getSubmissionsList(userId)
+            if (response.isSuccessful) {
+                _submissionResponse.postValue(response)
+            }
+        }
+
     }
 
     // updating color of the views according to rating of the user
     private fun updateColor(rating: Int): Int {
         return when (rating) {
-            in 0..1199 -> R.color.rank_green
+            in 0..1199 -> R.color.rank_grey
             in 2100..2399 -> R.color.rank_yellow
             in 1900..2099 -> R.color.rank_purple
             in 1600..1899 -> R.color.rank_blue
@@ -83,5 +122,6 @@ class UserSearchResultViewModel(private val repository: Repository) : ViewModel(
             else -> R.color.rank_red
         }
     }
+
 
 }

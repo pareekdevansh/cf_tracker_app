@@ -3,7 +3,6 @@ package com.pareekdevansh.cftracker.ui.profile
 import android.R
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.pareekdevansh.cftracker.databinding.FragmentProfileBinding
 import com.pareekdevansh.cftracker.models.Submission
 import com.pareekdevansh.cftracker.models.User
@@ -33,6 +33,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var profileViewModel: ProfileViewModel
     val repository = Repository()
+    private var colorSet = mutableListOf<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +59,8 @@ class ProfileFragment : Fragment() {
         val submissionLanguage: MutableMap<String, Int> = mutableMapOf()
         val submissionVerdict: MutableMap<String, Int> = mutableMapOf()
 
+        generate100Colors()
+
 
         profileViewModel.getUsers()
         profileViewModel.getUserRatings()
@@ -74,6 +77,7 @@ class ProfileFragment : Fragment() {
         { response ->
             if (response.isSuccessful) {
 //                Log.d(tag, response.body().toString())
+                updatePerformanceCard()
 
             }
         }
@@ -123,7 +127,11 @@ class ProfileFragment : Fragment() {
                             }
                         }
                     }
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
+                        binding.loadingAnimation.apply {
+                            visibility = View.GONE
+                            pauseAnimation()
+                        }
                         profileViewModel.lineDataSet.observe(viewLifecycleOwner) {
                             binding.ratingCurve.data = LineData(it)
                             binding.ratingCurve.invalidate()
@@ -144,24 +152,55 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun prepareVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
-        val entries : MutableList<PieEntry> = mutableListOf()
-        for(item in submissionVerdict){
-            entries.add(PieEntry(item.value.toFloat(), item.key) )
+    private fun generate100Colors() {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (colorSet.size < 100) {
+                val color = Color.argb(255, (1..256).random(), (1..256).random(), (1..256).random())
+                if (color == Color.WHITE || color == Color.BLACK)
+                    continue
+                colorSet.add(color)
+            }
         }
-        val pieDataSet = PieDataSet(entries , "Submission Verdicts")
+    }
+
+    private fun updatePerformanceCard() {
+
+        binding.apply {
+            contestGiven.text = "Contests: " + profileViewModel.contestGiven.toString()
+            minRatingChange.text = "Minimum Delta: " + profileViewModel.minRatingChange.toString()
+            maxRatingChange.text = "Maximum Delta: " + profileViewModel.maxRatingChange.toString()
+            bestRank.text = "Best Rank: " + profileViewModel.bestRank.toString()
+            worstRank.text = "Worst Rank: " + profileViewModel.worstRank.toString()
+        }
+    }
+
+    private fun prepareVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
+        val entries: MutableList<PieEntry> = mutableListOf()
+        val label_entries: MutableList<String> = mutableListOf()
+
+        for (item in submissionVerdict) {
+            label_entries.add(item.key)
+            entries.add(PieEntry(item.value.toFloat(), item.key))
+        }
+        val pieDataSet = PieDataSet(entries, "Submission Verdicts")
         pieDataSet.apply {
-            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+            colors = colorSet
+            valueTextColor = Color.BLACK;
+            sliceSpace = 1f;
         }
         val pieData = PieData(pieDataSet)
-        binding.pieChartVerdicts.apply {
 
-            description = null
+
+        binding.pieChartVerdicts.apply {
+            description.isEnabled = false
+            setEntryLabelColor(Color.BLACK)
+            legend.isEnabled = false
             isDrawHoleEnabled = true
             setEntryLabelTextSize(12f)
             setEntryLabelColor(R.color.black)
-            centerText = "Languages used"
-            setCenterTextSize(24f)
+            centerText = "Submission Vedicts"
+            setCenterTextSize(18f)
+
             data = pieData
             invalidate()
             animateY(2000, Easing.EaseInCirc)
@@ -169,13 +208,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun prepareTagsChart(problemTags: MutableMap<String, Int>) {
-        val entries : MutableList<PieEntry> = mutableListOf()
-        for(item in problemTags){
-            entries.add(PieEntry(item.value.toFloat(), item.key) )
+        val entries: MutableList<PieEntry> = mutableListOf()
+        for (item in problemTags) {
+            entries.add(PieEntry(item.value.toFloat(), item.key))
         }
-        val pieDataSet = PieDataSet(entries , "Problem Tags")
+        val pieDataSet = PieDataSet(entries, "Problem Tags")
         pieDataSet.apply {
-            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+            colors = colorSet
+
         }
         val pieData = PieData(pieDataSet)
         binding.pieChartTags.apply {
@@ -185,8 +225,10 @@ class ProfileFragment : Fragment() {
             setDrawEntryLabels(true)
             setEntryLabelTextSize(12f)
             setEntryLabelColor(R.color.black)
-            centerText = "Languages used"
-            setCenterTextSize(24f)
+            centerText = "Problem Tags"
+            setCenterTextSize(20f)
+            legend.isEnabled = false
+
             data = pieData
             invalidate()
             animateY(2000, Easing.EaseInCirc)
@@ -194,13 +236,14 @@ class ProfileFragment : Fragment() {
     }
 
     private fun prepareLanguageChart(submissionLanguage: MutableMap<String, Int>) {
-        val entries : MutableList<PieEntry> = mutableListOf()
-        for(item in submissionLanguage){
-            entries.add(PieEntry(item.value.toFloat(), item.key) )
+        val entries: MutableList<PieEntry> = mutableListOf()
+        for (item in submissionLanguage) {
+            entries.add(PieEntry(item.value.toFloat(), item.key))
         }
-        val pieDataSet = PieDataSet(entries , "Submission Languages")
+        val pieDataSet = PieDataSet(entries, "Submission Languages")
         pieDataSet.apply {
-            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+            colors = colorSet
+
         }
         val pieData = PieData(pieDataSet)
         binding.pieChartLanguage.apply {
@@ -209,10 +252,12 @@ class ProfileFragment : Fragment() {
             setEntryLabelTextSize(12f)
             setEntryLabelColor(R.color.black)
             centerText = "Languages used"
-            setCenterTextSize(24f)
+            setCenterTextSize(20f)
             data = pieData
+            legend.isEnabled = false
+
             invalidate()
-            animateY(2000, Easing.EaseInCirc)
+            animateY(2000, Easing.EaseInOutElastic)
         }
 
     }
@@ -223,29 +268,28 @@ class ProfileFragment : Fragment() {
 
         var count = 0
         for (item in problemIndexes.toSortedMap()) {
-            Log.d("oblabla", count.toString())
-            if (item.value != 0) {
-                count++
-                entries.add(BarEntry(count.toFloat(), item.value.toFloat()))
-                xentries.add(item.key)
-            }
+            entries.add(BarEntry(count.toFloat(), item.value.toFloat()))
+            xentries.add(item.key)
+            count++
         }
-        Log.d("oblabla", entries.toString())
-        val barDataSet = BarDataSet(entries, "Ratings Table")
+        val barDataSet = BarDataSet(entries, "Problem Levels")
         barDataSet.apply {
             barBorderWidth = 1f
-            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+            colors = colorSet
             valueTextColor = Color.BLACK
         }
         val barData = BarData(barDataSet)
         binding.levelTable.apply {
             axisRight.isEnabled = false
             xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(xentries)
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
+                setDrawLabels(true)
             }
+            legend.form = Legend.LegendForm.NONE
             animateXY(2000, 2000)
             description = null
             data = barData
@@ -255,39 +299,43 @@ class ProfileFragment : Fragment() {
 
     private fun prepareRatingTable(problemRatings: MutableMap<Int, Int>) {
         val entries: MutableList<BarEntry> = mutableListOf()
+        val xentries: MutableList<String> = mutableListOf()
+        var count = 0
         for (item in problemRatings.toSortedMap()) {
-            if (item.key >= 800 && item.value > 0)
-                entries.add(BarEntry((item.key / 100).toFloat(), item.value.toFloat()))
+            if (item.key >= 800 && item.value > 0) {
+                entries.add(BarEntry(count.toFloat(), item.value.toFloat()))
+                xentries.add(item.key.toString())
+                count++
+            }
         }
-        Log.d("oblabla", entries.toString())
-        val barDataSet = BarDataSet(entries, "Problem Ratings / 100")
+        val barDataSet = BarDataSet(entries, "Problem Ratings")
         barDataSet.apply {
             barBorderWidth = 2f
-            colors = ColorTemplate.COLORFUL_COLORS.toMutableList()
+            colors = colorSet
             valueTextColor = Color.BLACK
         }
         val barData = BarData(barDataSet)
         binding.ratingTable.apply {
             axisRight.isEnabled = false
             xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(xentries)
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setDrawGridLines(false)
                 setDrawAxisLine(false)
+                setDrawLabels(true)
             }
+            legend.form = Legend.LegendForm.NONE
+            description = null
             animateXY(2000, 2000)
             data = barData
             invalidate()
         }
-
     }
 
     private fun makeGraphPrettier() {
         binding.ratingCurve.apply {
             axisRight.isEnabled = false
-//            axisLeft.apply {
-//                isEnabled =false
-//            }
             xAxis.apply {
 //                isEnabled = true
                 isGranularityEnabled = true
@@ -308,7 +356,7 @@ class ProfileFragment : Fragment() {
 
     private fun updateCurrentUser(user: User) {
         binding.apply {
-            updateTextFieldData(user)
+            updateProfileCard(user)
             updateTextFieldColor()
             // updating profile picture
             if (user.titlePhoto != null) {
@@ -319,16 +367,24 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateTextFieldColor() {
-        binding.apply {
-            profileViewModel.rankColor.value?.let { firstName.setTextColor(it) }
-            profileViewModel.rankColor.value?.let { lastName.setTextColor(it) }
-            profileViewModel.rankColor.value?.let { handle.setTextColor(it) }
-            profileViewModel.maxRankColor.value?.let { maxRank.setTextColor(it) }
-            profileViewModel.maxRankColor.value?.let { maxRating.setTextColor(it) }
+        profileViewModel.rankColor.observe(viewLifecycleOwner) { rankColor ->
+            binding.apply {
+                firstName.setTextColor(rankColor)
+                lastName.setTextColor(rankColor)
+                handle.setTextColor(rankColor)
+                rating.setTextColor(rankColor)
+                rank.setTextColor(rankColor)
+            }
+        }
+        profileViewModel.maxRankColor.observe(viewLifecycleOwner) { rankColor ->
+            binding.apply {
+                maxRank.setTextColor(rankColor)
+                maxRating.setTextColor(rankColor)
+            }
         }
     }
 
-    private fun updateTextFieldData(user: User) {
+    private fun updateProfileCard(user: User) {
         binding.apply {
             contribution.text = "Contribution: " + user.contribution.toString()
             firstName.text = user.firstName
@@ -342,6 +398,7 @@ class ProfileFragment : Fragment() {
             country.text = "Country: " + user.country
             organization.text = "Organization: " + user.organization
             registrationTimeSeconds.visibility = View.GONE
+
         }
     }
 

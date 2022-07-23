@@ -13,6 +13,19 @@
         android:padding="2dp">
 
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimation"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="200dp"
+            android:elevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true" />
+
         <ImageView
             android:id="@+id/avatar"
             android:layout_width="250dp"
@@ -160,57 +173,123 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/performanceCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileCard">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/performanceCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/contestGiven"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contest Given: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/performanceCL" />
+
+                <TextView
+                    android:id="@+id/minRatingChange"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minimum Delta : "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/maxRatingChange" />
+
+                <TextView
+                    android:id="@+id/maxRatingChange"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum Delta: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/contestGiven" />
+
+                <TextView
+                    android:id="@+id/worstRank"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="worst Rank: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/bestRank" />
+
+
+                <TextView
+                    android:id="@+id/bestRank"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="rank: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/minRatingChange" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/ratingCurve"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileCard"/>
+            app:layout_constraintTop_toBottomOf="@id/performanceCard" />
 
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/ratingTable"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="400dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingCurve"/>
+            app:layout_constraintTop_toBottomOf="@id/ratingCurve" />
+
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/levelTable"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="400dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingTable"
-            />
+            app:layout_constraintTop_toBottomOf="@id/ratingTable" />
+
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartTags"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            app:layout_constraintTop_toBottomOf="@id/levelTable"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/levelTable" />
 
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartLanguage"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            app:layout_constraintTop_toBottomOf="@id/pieChartTags"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pieChartTags" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChartVerdicts"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            app:layout_constraintTop_toBottomOf="@id/pieChartLanguage"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pieChartLanguage" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
