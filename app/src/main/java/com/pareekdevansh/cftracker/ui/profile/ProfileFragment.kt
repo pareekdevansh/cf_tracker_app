@@ -1,11 +1,11 @@
 package com.pareekdevansh.cftracker.ui.profile
 
-import android.R
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -14,6 +14,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.databinding.FragmentProfileBinding
 import com.pareekdevansh.cftracker.models.Submission
 import com.pareekdevansh.cftracker.models.User
@@ -34,6 +35,14 @@ class ProfileFragment : Fragment() {
     lateinit var profileViewModel: ProfileViewModel
     val repository = Repository()
     private var colorSet = mutableListOf<Int>()
+    private var moreInfoCardExpanded = true
+    private var performanceCardExpanded = true
+    private var ratingCurveExpanded = true
+    private var ratingTableExpanded = true
+    private var levelTableExpanded = true
+    private var problemTagsChartExpanded = true
+    private var languageTagsChartExpanded = true
+    private var submissionVerdictsExpanded = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -132,6 +141,7 @@ class ProfileFragment : Fragment() {
                             visibility = View.GONE
                             pauseAnimation()
                         }
+                        binding.apply { completeScreen.visibility = View.VISIBLE }
                         profileViewModel.lineDataSet.observe(viewLifecycleOwner) {
                             binding.ratingCurve.data = LineData(it)
                             binding.ratingCurve.invalidate()
@@ -147,6 +157,195 @@ class ProfileFragment : Fragment() {
 
             }
 
+        }
+
+        binding.btnMoreInfoCardExpand.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (moreInfoCardExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                moreInfoDropDownCL.visibility = viewVisibility
+                moreInfoDropDownCL.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnMoreInfoCardExpand.setImageResource(imageId)
+            }
+            moreInfoCardExpanded = !moreInfoCardExpanded
+
+        }
+
+        binding.btnExpandPerformanceCard.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (performanceCardExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                performanceDropDownCL.visibility = viewVisibility
+                performanceDropDownCL.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandPerformanceCard.setImageResource(imageId)
+            }
+            performanceCardExpanded = !performanceCardExpanded
+        }
+        binding.btnExpandRatingCurve.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (ratingCurveExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                ratingCurve.visibility = viewVisibility
+                ratingCurve.startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
+                btnExpandRatingCurve.setImageResource(imageId)
+            }
+            ratingCurveExpanded = !ratingCurveExpanded
+        }
+
+        binding.btnExpandRatingTable.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (ratingTableExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                ratingTable.visibility = viewVisibility
+                ratingTable.startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
+                btnExpandRatingTable.setImageResource(imageId)
+            }
+            ratingTableExpanded = !ratingTableExpanded
+        }
+        binding.btnExpandLevelTable.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (levelTableExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                levelTable.visibility = viewVisibility
+                levelTable.startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
+                btnExpandLevelTable.setImageResource(imageId)
+            }
+            levelTableExpanded = !levelTableExpanded
+        }
+        binding.btnExpandProblemTagsChart.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (problemTagsChartExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                pieChartProblemTags.visibility = viewVisibility
+                pieChartProblemTags.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandProblemTagsChart.setImageResource(imageId)
+            }
+            problemTagsChartExpanded = !problemTagsChartExpanded
+        }
+        binding.btnExpandLanguageTagsChart.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (languageTagsChartExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                pieChartLanguage.visibility = viewVisibility
+                pieChartLanguage.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandLanguageTagsChart.setImageResource(imageId)
+            }
+            languageTagsChartExpanded = !languageTagsChartExpanded
+        }
+        binding.btnExpandSubmissionVerdicts.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (submissionVerdictsExpanded) {
+                anim = R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = R.drawable.baseline_expand_more_24
+            } else {
+                anim = R.anim.slide_down_anim
+                imageId = R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                pieChartVerdicts.visibility = viewVisibility
+                pieChartVerdicts.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandSubmissionVerdicts.setImageResource(imageId)
+            }
+            submissionVerdictsExpanded = !submissionVerdictsExpanded
         }
 
 
@@ -218,7 +417,7 @@ class ProfileFragment : Fragment() {
 
         }
         val pieData = PieData(pieDataSet)
-        binding.pieChartTags.apply {
+        binding.pieChartProblemTags.apply {
 
             description = null
             isDrawHoleEnabled = true

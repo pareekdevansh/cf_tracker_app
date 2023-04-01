@@ -226,7 +226,7 @@ class UserSearchResultFragment : Fragment() {
 
         }
         val pieData = PieData(pieDataSet)
-        binding.pieChartTags.apply {
+        binding.pieChartProblemTags.apply {
 
             description = null
             isDrawHoleEnabled = true

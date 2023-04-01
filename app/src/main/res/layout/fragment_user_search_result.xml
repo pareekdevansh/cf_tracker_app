@@ -478,7 +478,7 @@
                     app:layout_constraintTop_toTopOf="@id/problemTagsCardCL" />
 
                 <ImageButton
-                    android:id="@+id/btnExpandTagsChart"
+                    android:id="@+id/btnExpandProblemTagsChart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_expand_more_24"
@@ -487,7 +487,7 @@
                     app:layout_constraintTop_toTopOf="@id/tvProblemTags" />
 
                 <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartTags"
+                    android:id="@+id/pieChartProblemTags"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_marginTop="4dp"

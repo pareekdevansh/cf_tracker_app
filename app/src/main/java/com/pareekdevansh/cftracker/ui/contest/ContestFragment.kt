@@ -29,11 +29,11 @@ class ContestFragment : Fragment() {
     lateinit var liveContestAdapter: ContestAdapter
     lateinit var recentContestAdapter: ContestAdapter
     lateinit var upcomingContestAdapter: ContestAdapter
-    lateinit var rvLiveContest : RecyclerView
-    lateinit var rvRecentContest : RecyclerView
-    lateinit var rvUpcomingContest : RecyclerView
+    lateinit var rvLiveContest: RecyclerView
+    lateinit var rvRecentContest: RecyclerView
+    lateinit var rvUpcomingContest: RecyclerView
     private var _binding: FragmentContestBinding? = null
-    private var liveContestCardExpanded = false
+    private var liveContestCardExpanded = true
     private var recentContestCardExpanded = false
     private var upcomingContestCardExpanded = false
 
@@ -68,65 +68,68 @@ class ContestFragment : Fragment() {
 
         contestViewModel.getContest()
         contestViewModel.contestResponse.observe(viewLifecycleOwner) { response ->
-            if(response.isSuccessful){
+            if (response.isSuccessful) {
                 // update live contests
-                binding.loadingAnimation.pauseAnimation()
-                binding.loadingAnimation.visibility = View.GONE
-                val liveContest = response.body()?.contest?.filter { it.phase == "CODING" }
-                if(liveContest == null ){
-                    // TODO: show no live contests text
+                binding.apply {
+                    loadingAnimation.pauseAnimation()
+                    loadingAnimation.visibility= View.GONE
+                    LiveContestCard.visibility = View.VISIBLE
+                    recentContestCard.visibility = View.VISIBLE
+                    upComingContestCard.visibility = View.VISIBLE
                 }
-                else{
+                val liveContest = response.body()?.contest?.filter { it.phase == "CODING" }
+                if (liveContest == null) {
+                    // TODO: show no live contests text
+                } else {
                     liveContestAdapter.differ.submitList(liveContest)
                 }
 
                 // update recent contests
-                val recentContests = response.body()?.contest?.filter {( it.phase == "FINISHED" || it.phase == "SYSTEM_TEST" || it.phase == "PENDING_SYSTEM_TEST") && (it.relativeTimeSeconds?.let { time -> time <= 24 * 7 * 60 * 60 } == true)  }
-                if(recentContests == null )
-                {
+                val recentContests =
+                    response.body()?.contest?.filter { (it.phase == "FINISHED" || it.phase == "SYSTEM_TEST" || it.phase == "PENDING_SYSTEM_TEST") && (it.relativeTimeSeconds?.let { time -> time <= 24 * 7 * 60 * 60 } == true) }
+                if (recentContests == null) {
                     //TODO: show there are no recent contests
-                }
-                else{
+                } else {
                     recentContestAdapter.differ.submitList(recentContests)
                 }
 
                 // update upcoming contests
-                val upcomingContests = response.body()?.contest?.filter { it.phase == "BEFORE" && (it.relativeTimeSeconds?.let { time -> abs(time) <= 24 * 7 * 60 * 60 } == true) }
-                if(upcomingContests == null ){
-                    // TODO: no upcoming contests
+                val upcomingContests = response.body()?.contest?.filter {
+                    it.phase == "BEFORE" && (it.relativeTimeSeconds?.let { time ->
+                        abs(time) <= 24 * 7 * 60 * 60
+                    } == true)
                 }
-                else{
+                if (upcomingContests == null) {
+                    // TODO: no upcoming contests
+                } else {
                     upcomingContestAdapter.differ.submitList(upcomingContests.asReversed())
                 }
-            }
-            else{
+            } else {
                 showToast(response.message())
             }
         }
 
-        contestViewModel.ratingChangeResponse.observe(viewLifecycleOwner){ response ->
-            if(response.isSuccessful){
-                Log.d("blablabla" , response.toString())
+        contestViewModel.ratingChangeResponse.observe(viewLifecycleOwner) { response ->
+            if (response.isSuccessful) {
+                Log.d("blablabla", response.toString())
                 Log.d("blablabla", response.body().toString())
-            }
-            else{
+            } else {
                 showToast(response.message())
             }
 
         }
 
         binding.btnExpandLiveContest.setOnClickListener {
-            var imageId : Int
-            var viewVisibility : Int
-            var anim : Int
-            if(liveContestCardExpanded){
+            var imageId: Int
+            var viewVisibility: Int
+            var anim: Int
+            if (liveContestCardExpanded) {
                 // make the recycler view visibility to Gone
                 viewVisibility = View.GONE
                 // change the button icon to expand more
                 imageId = R.drawable.baseline_expand_more_24
                 anim = R.anim.slide_up_anim
-            }
-            else{
+            } else {
                 // make recycler view visible
                 viewVisibility = View.VISIBLE
                 // change icon sign to expand less
@@ -135,23 +138,22 @@ class ContestFragment : Fragment() {
             }
             binding.rvLiveContest.apply {
                 visibility = viewVisibility
-                startAnimation(AnimationUtils.loadAnimation(requireContext() , anim))
+                startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
             }
             liveContestCardExpanded = !liveContestCardExpanded
             binding.btnExpandLiveContest.setImageDrawable(resources.getDrawable(imageId))
         }
         binding.btnExpandUpcomingContest.setOnClickListener {
-            var imageId : Int
-            var viewVisibility : Int
-            var anim : Int
-            if(upcomingContestCardExpanded){
+            var imageId: Int
+            var viewVisibility: Int
+            var anim: Int
+            if (upcomingContestCardExpanded) {
                 // make the recycler view visibility to Gone
                 viewVisibility = View.GONE
                 // change the button icon to expand more
                 imageId = R.drawable.baseline_expand_more_24
                 anim = R.anim.slide_up_anim
-            }
-            else{
+            } else {
                 // make recycler view visible
                 viewVisibility = View.VISIBLE
                 // change icon sign to expand less
@@ -160,34 +162,33 @@ class ContestFragment : Fragment() {
             }
             binding.rvUpcomingContest.apply {
                 visibility = viewVisibility
-                startAnimation(AnimationUtils.loadAnimation(requireContext() , anim))
+                startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
             }
             upcomingContestCardExpanded = !upcomingContestCardExpanded
             binding.btnExpandUpcomingContest.setImageDrawable(resources.getDrawable(imageId))
         }
 
         binding.btnExpandRecentContest.setOnClickListener {
-            var imageId : Int
-            var anim1 : Int
-            var viewVisibility :Int
-            if(recentContestCardExpanded){
+            var imageId: Int
+            var anim1: Int
+            var viewVisibility: Int
+            if (recentContestCardExpanded) {
                 // make the recycler view visibility to Gone
                 viewVisibility = View.GONE
                 // change the button icon to expand more
                 imageId = R.drawable.baseline_expand_more_24
                 anim1 = R.anim.slide_up_anim
 
-            }
-            else{
+            } else {
                 // make recycler view visible
                 viewVisibility = View.VISIBLE
                 // change icon sign to expand less
                 imageId = R.drawable.baseline_expand_less_24
-                anim1= R.anim.slide_down_anim
+                anim1 = R.anim.slide_down_anim
             }
             binding.rvRecentContest.apply {
                 visibility = viewVisibility
-                startAnimation(AnimationUtils.loadAnimation(requireContext() , anim1))
+                startAnimation(AnimationUtils.loadAnimation(requireContext(), anim1))
             }
             recentContestCardExpanded = !recentContestCardExpanded
             binding.btnExpandRecentContest.setImageDrawable(resources.getDrawable(imageId))
@@ -197,7 +198,7 @@ class ContestFragment : Fragment() {
     }
 
     private fun showToast(error: String) {
-        Toast.makeText(requireContext()  , error , Toast.LENGTH_LONG ).show()
+        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
     }
 
     private fun setupRecyclerView() {
