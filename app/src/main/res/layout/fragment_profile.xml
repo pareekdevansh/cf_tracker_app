@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="2dp">
 
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingAnimation"
             android:layout_width="match_parent"
@@ -24,7 +25,6 @@
             app:lottie_autoPlay="true"
             app:lottie_fileName="loading.json"
             app:lottie_loop="true" />
-
         <ImageView
             android:id="@+id/avatar"
             android:layout_width="0dp"
@@ -40,6 +40,7 @@
             android:id="@+id/profileCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:elevation="8dp"
             app:cardCornerRadius="16dp"
             app:cardUseCompatPadding="true"
@@ -53,14 +54,15 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp">
 
+
                 <TextView
-                    android:id="@+id/contribution"
+                    android:id="@+id/handle"
                     style="@style/normal_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="contribution: "
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/profileCL" />
+                    android:text="handle: "
+                    app:layout_constraintStart_toStartOf="@+id/profileCL"
+                    app:layout_constraintTop_toTopOf="@+id/profileCL" />
 
                 <TextView
                     android:id="@+id/firstName"
@@ -68,8 +70,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="firstName: "
-                    app:layout_constraintStart_toStartOf="@id/contribution"
-                    app:layout_constraintTop_toBottomOf="@id/contribution" />
+                    app:layout_constraintStart_toStartOf="@id/profileCL"
+                    app:layout_constraintTop_toBottomOf="@id/handle" />
 
                 <TextView
                     android:id="@+id/lastName"
@@ -81,15 +83,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/firstName"
                     app:layout_constraintStart_toEndOf="@+id/firstName" />
 
-                <TextView
-                    android:id="@+id/country"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="country: "
-                    app:layout_constraintStart_toStartOf="@+id/city"
-                    app:layout_constraintTop_toBottomOf="@+id/city" />
-
 
                 <TextView
                     android:id="@+id/rank"
@@ -97,8 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="rank: "
-                    app:layout_constraintStart_toStartOf="@+id/rating"
-                    app:layout_constraintTop_toBottomOf="@+id/rating" />
+                    app:layout_constraintStart_toStartOf="@+id/profileCL"
+                    app:layout_constraintTop_toBottomOf="@+id/firstName" />
 
                 <TextView
                     android:id="@+id/rating"
@@ -106,9 +99,60 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="rating: "
-                    app:layout_constraintStart_toStartOf="@+id/handle"
-                    app:layout_constraintTop_toBottomOf="@+id/handle" />
+                    app:layout_constraintStart_toStartOf="@+id/profileCL"
+                    app:layout_constraintTop_toBottomOf="@+id/rank" />
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/moreInfoCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileCard">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/moreInfoCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/tvMoreInfo"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="More Info"
+
+                    app:layout_constraintEnd_toStartOf="@id/btnMoreInfoCardExpand"
+                    app:layout_constraintStart_toStartOf="@id/moreInfoCL"
+                    app:layout_constraintTop_toTopOf="@id/moreInfoCL" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/btnMoreInfoCardExpand"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_expand_more_24"
+                    app:layout_constraintEnd_toEndOf="@id/moreInfoCL"
+                    app:layout_constraintTop_toTopOf="@id/tvMoreInfo" />
+
+                <TextView
+                    android:id="@+id/contribution"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="contribution: "
+                    app:layout_constraintStart_toStartOf="@id/moreInfoCL"
+                    app:layout_constraintTop_toBottomOf="@id/tvMoreInfo" />
 
                 <TextView
                     android:id="@+id/city"
@@ -116,35 +160,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="city: "
-                    app:layout_constraintStart_toStartOf="@+id/maxRating"
-                    app:layout_constraintTop_toBottomOf="@+id/maxRank" />
+                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
+                    app:layout_constraintTop_toBottomOf="@+id/contribution" />
 
                 <TextView
-                    android:id="@+id/handle"
+                    android:id="@+id/country"
                     style="@style/normal_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="handle: "
-                    app:layout_constraintStart_toStartOf="@+id/firstName"
-                    app:layout_constraintTop_toBottomOf="@+id/firstName" />
-
-                <TextView
-                    android:id="@+id/maxRank"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="maxRank: "
-                    app:layout_constraintStart_toStartOf="@+id/maxRating"
-                    app:layout_constraintTop_toBottomOf="@+id/maxRating" />
-
-                <TextView
-                    android:id="@+id/maxRating"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="maxRating: "
-                    app:layout_constraintStart_toStartOf="@+id/rating"
-                    app:layout_constraintTop_toBottomOf="@+id/rank" />
+                    android:text="country: "
+                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
+                    app:layout_constraintTop_toBottomOf="@+id/city" />
 
                 <TextView
                     android:id="@+id/organization"
@@ -152,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="organization: "
-                    app:layout_constraintStart_toStartOf="@+id/city"
+                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
                     app:layout_constraintTop_toBottomOf="@+id/country" />
 
                 <TextView
@@ -161,13 +187,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="registrationTimeSeconds: "
-                    app:layout_constraintStart_toStartOf="@+id/organization"
+                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
                     app:layout_constraintTop_toBottomOf="@+id/organization" />
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </com.google.android.material.card.MaterialCardView>
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/performanceCard"
@@ -179,7 +204,7 @@
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileCard">
+            app:layout_constraintTop_toBottomOf="@id/moreInfoCard">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/performanceCL"
@@ -188,22 +213,61 @@
                 android:padding="2dp">
 
                 <TextView
+                    android:id="@+id/tvPerformanceCard"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contest History"
+                    app:layout_constraintStart_toStartOf="@id/performanceCL"
+                    app:layout_constraintTop_toTopOf="@id/performanceCL" />
+
+                <ImageButton
+                    android:id="@+id/btnExpandPerformanceCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_expand_more_24"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvPerformanceCard"
+                    app:layout_constraintEnd_toEndOf="@id/performanceCL"
+                    app:layout_constraintTop_toTopOf="@id/tvPerformanceCard" />
+
+                <TextView
                     android:id="@+id/contestGiven"
                     style="@style/normal_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Contest Given: "
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/performanceCL" />
+                    app:layout_constraintStart_toStartOf="@+id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPerformanceCard"
+
+                    />
+
+                <TextView
+                    android:id="@+id/maxRank"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="maxRank: "
+                    app:layout_constraintStart_toStartOf="@id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@id/contestGiven" />
+
+                <TextView
+                    android:id="@+id/maxRating"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="maxRating: "
+                    app:layout_constraintStart_toStartOf="@+id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@+id/maxRank" />
 
                 <TextView
                     android:id="@+id/minRatingChange"
                     style="@style/normal_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Minimum Delta : "
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/maxRatingChange" />
+                    app:layout_constraintStart_toStartOf="@id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@id/maxRating" />
 
                 <TextView
                     android:id="@+id/maxRatingChange"
@@ -211,18 +275,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Maximum Delta: "
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/contestGiven" />
-
-                <TextView
-                    android:id="@+id/worstRank"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="worst Rank: "
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bestRank" />
-
+                    app:layout_constraintStart_toStartOf="@id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@id/minRatingChange" />
 
                 <TextView
                     android:id="@+id/bestRank"
@@ -230,8 +284,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="rank: "
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/minRatingChange" />
+                    app:layout_constraintStart_toStartOf="@id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@id/maxRatingChange" />
+
+                <TextView
+                    android:id="@+id/worstRank"
+                    style="@style/normal_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="worst Rank: "
+                    app:layout_constraintStart_toStartOf="@id/performanceCL"
+                    app:layout_constraintTop_toBottomOf="@id/bestRank" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -255,6 +319,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp">
+
 
                 <TextView
                     android:id="@+id/tvRatingCurve"

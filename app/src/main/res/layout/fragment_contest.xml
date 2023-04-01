@@ -10,81 +10,181 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="64dp"
-        >
-<com.airbnb.lottie.LottieAnimationView
-    android:id="@+id/loadingAnimation"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginTop="200dp"
-    app:lottie_autoPlay="true"
-    app:lottie_loop="true"
-    app:lottie_fileName="loading.json"
-    />
-        <TextView
-            android:id="@+id/tvLiveContest"
-            style="@style/normal_tv"
+        android:paddingBottom="64dp">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimation"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Live Contest"
-            android:textAlignment="center"
+            android:layout_height="200dp"
+            android:layout_marginTop="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="loading.json"
+            app:lottie_loop="true" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvLiveContest"
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/LiveContestCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvLiveContest"
-            tools:listitem="@layout/item_contest" />
+            android:layout_marginTop="16dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
+            app:layout_constraintStart_toStartOf="@id/constraintLayout"
+            app:layout_constraintTop_toTopOf="@id/constraintLayout">
 
 
-        <TextView
-            android:id="@+id/tvUpcomingContest"
-            style="@style/normal_tv"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/liveContestCardCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/tvLiveContest"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Live Contests"
+                    app:layout_constraintEnd_toStartOf="@id/btnExpandLiveContest"
+                    app:layout_constraintStart_toStartOf="@id/liveContestCardCL"
+                    app:layout_constraintTop_toTopOf="@id/liveContestCardCL" />
+
+                <ImageButton
+                    android:id="@+id/btnExpandLiveContest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_expand_more_24"
+                    app:layout_constraintEnd_toEndOf="@id/liveContestCardCL"
+                    app:layout_constraintTop_toTopOf="@id/liveContestCardCL" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvLiveContest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/liveContestCardCL"
+                    app:layout_constraintStart_toStartOf="@id/liveContestCardCL"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLiveContest"
+                    tools:listitem="@layout/item_contest" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/upComingContestCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Upcoming Contest"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rvLiveContest" />
+            android:layout_marginTop="16dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
+            app:layout_constraintStart_toStartOf="@id/constraintLayout"
+            app:layout_constraintTop_toBottomOf="@id/LiveContestCard">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvUpcomingContest"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/upcomingContestCardCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/tvUpcomingContest"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Upcoming Contest"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toStartOf="@id/btnExpandUpcomingContest"
+                    app:layout_constraintStart_toStartOf="@id/upcomingContestCardCL"
+                    app:layout_constraintTop_toTopOf="@id/upcomingContestCardCL" />
+
+
+                <ImageButton
+                    android:id="@+id/btnExpandUpcomingContest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_expand_more_24"
+                    app:layout_constraintEnd_toEndOf="@id/upcomingContestCardCL"
+                    app:layout_constraintTop_toTopOf="@id/upcomingContestCardCL" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvUpcomingContest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+
+                    app:layout_constraintEnd_toEndOf="@id/upcomingContestCardCL"
+                    app:layout_constraintStart_toStartOf="@id/upcomingContestCardCL"
+                    app:layout_constraintTop_toBottomOf="@+id/tvUpcomingContest"
+                    tools:listitem="@layout/item_contest" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/recentContestCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvUpcomingContest"
-            tools:listitem="@layout/item_contest" />
+            android:layout_marginTop="16dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
+            app:layout_constraintStart_toStartOf="@id/constraintLayout"
+            app:layout_constraintTop_toBottomOf="@id/upComingContestCard">
 
 
-        <TextView
-            android:id="@+id/tvRecentContest"
-            style="@style/normal_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recent Contest"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvUpcomingContest" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recentContestCardCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRecentContest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvRecentContest"
-            tools:listitem="@layout/item_contest" />
+                <TextView
+                    android:id="@+id/tvRecentContest"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Recent Contests"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toStartOf="@id/btnExpandRecentContest"
+                    app:layout_constraintStart_toStartOf="@id/recentContestCardCL"
+                    app:layout_constraintTop_toTopOf="@id/recentContestCardCL" />
+
+                <ImageButton
+                    android:id="@+id/btnExpandRecentContest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_expand_more_24"
+                    app:layout_constraintEnd_toEndOf="@id/recentContestCardCL"
+                    app:layout_constraintTop_toTopOf="@id/recentContestCardCL" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecentContest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/recentContestCardCL"
+                    app:layout_constraintStart_toStartOf="@id/recentContestCardCL"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRecentContest"
+                    tools:listitem="@layout/item_contest" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

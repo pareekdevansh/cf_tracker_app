@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         binding.navView.visibility = View.GONE
 
         CoroutineScope(Dispatchers.Main).launch {
-            delay(2500L)
+//            delay(2000L)
 
             binding.frameLayout.visibility = View.GONE
             binding.splashAnimation.apply {
