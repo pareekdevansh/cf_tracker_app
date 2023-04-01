@@ -43,6 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_fileName="splash_screen.json"
+        app:lottie_fileName="CF_tracker_entry.json"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
