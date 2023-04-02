@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="#CCCCCC"
+    android:backgroundTint="@color/yellow_gold"
     android:layout_margin="4dp"
     app:cardCornerRadius="8dp">
+
+<!--    android:backgroundTint="#CCCCCC" -->
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

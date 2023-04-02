@@ -72,15 +72,18 @@ class ContestFragment : Fragment() {
                 // update live contests
                 binding.apply {
                     loadingAnimation.pauseAnimation()
-                    loadingAnimation.visibility= View.GONE
+                    loadingAnimation.visibility = View.GONE
                     LiveContestCard.visibility = View.VISIBLE
                     recentContestCard.visibility = View.VISIBLE
                     upComingContestCard.visibility = View.VISIBLE
                 }
                 val liveContest = response.body()?.contest?.filter { it.phase == "CODING" }
-                if (liveContest == null) {
-                    // TODO: show no live contests text
+                if (liveContest == null || liveContest.isEmpty()) {
+                    binding.noLiveContestAnimationLL.visibility = View.VISIBLE
+                    binding.rvLiveContest.visibility = View.GONE
                 } else {
+                    binding.noLiveContestAnimationLL.visibility = View.GONE
+                    binding.rvLiveContest.visibility = View.VISIBLE
                     liveContestAdapter.differ.submitList(liveContest)
                 }
 
@@ -136,6 +139,7 @@ class ContestFragment : Fragment() {
                 imageId = R.drawable.baseline_expand_less_24
                 anim = R.anim.slide_down_anim
             }
+            binding.noLiveContestAnimationLL.visibility = viewVisibility
             binding.rvLiveContest.apply {
                 visibility = viewVisibility
                 startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))

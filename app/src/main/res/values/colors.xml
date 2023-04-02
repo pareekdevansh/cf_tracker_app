@@ -16,4 +16,7 @@
     <color name="rank_cyan">#3AB09E</color>
     <color name="rank_green">#008000</color>
     <color name="rank_grey">#A9A9A9</color>
+    <color name="background_screen">#E7F2F8</color>
+    <color name="yellow_gold">#E6CA48</color>
+    <color name="light_red">#C89696</color>
 </resources>
