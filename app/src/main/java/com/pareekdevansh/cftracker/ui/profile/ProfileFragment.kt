@@ -211,6 +211,7 @@ class ProfileFragment : Fragment() {
             }
             performanceCardExpanded = !performanceCardExpanded
         }
+
         binding.btnExpandRatingCurve.setOnClickListener {
             var viewVisibility: Int
             var imageId: Int
@@ -252,6 +253,7 @@ class ProfileFragment : Fragment() {
             }
             ratingTableExpanded = !ratingTableExpanded
         }
+
         binding.btnExpandLevelTable.setOnClickListener {
             var viewVisibility: Int
             var imageId: Int
@@ -272,6 +274,7 @@ class ProfileFragment : Fragment() {
             }
             levelTableExpanded = !levelTableExpanded
         }
+
         binding.btnExpandProblemTagsChart.setOnClickListener {
             var viewVisibility: Int
             var imageId: Int
@@ -297,6 +300,7 @@ class ProfileFragment : Fragment() {
             }
             problemTagsChartExpanded = !problemTagsChartExpanded
         }
+
         binding.btnExpandLanguageTagsChart.setOnClickListener {
             var viewVisibility: Int
             var imageId: Int
@@ -322,6 +326,7 @@ class ProfileFragment : Fragment() {
             }
             languageTagsChartExpanded = !languageTagsChartExpanded
         }
+
         binding.btnExpandSubmissionVerdicts.setOnClickListener {
             var viewVisibility: Int
             var imageId: Int
@@ -588,7 +593,7 @@ class ProfileFragment : Fragment() {
             contribution.text = "Contribution: " + user.contribution.toString()
             firstName.text = user.firstName
             lastName.text = user.lastName
-            handle.text = "Handle: " + user.handle
+            handle.text = "@" + user.handle
             rating.text = "Rating: " + user.rating.toString()
             rank.text = "Rank: " + user.rank
             maxRating.text = "Max Rating: " + user.maxRating.toString()

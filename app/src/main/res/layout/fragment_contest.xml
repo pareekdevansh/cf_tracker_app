@@ -11,7 +11,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="64dp">
+        android:paddingBottom="256dp">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingAnimation"
@@ -46,7 +46,9 @@
                 android:id="@+id/liveContestCardCL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:padding="8dp"
+
+                >
 
                 <TextView
                     android:id="@+id/tvLiveContest"
@@ -65,6 +67,7 @@
                     android:id="@+id/btnExpandLiveContest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:background="@drawable/custom_button_shape"
                     android:src="@drawable/baseline_expand_less_24"
                     app:layout_constraintEnd_toEndOf="@id/liveContestCardCL"
@@ -132,7 +135,6 @@
             app:cardCornerRadius="16dp"
             app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
             app:layout_constraintTop_toBottomOf="@id/LiveContestCard"
             tools:visibility="visible">
@@ -140,9 +142,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/upcomingContestCardCL"
+                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                >
 
                 <TextView
                     android:id="@+id/tvUpcomingContest"
@@ -150,33 +153,32 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-
                     android:text="Upcoming Contest"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="@id/btnExpandUpcomingContest"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/upcomingContestCardCL"
-                    app:layout_constraintTop_toTopOf="@id/btnExpandUpcomingContest" />
+                    app:layout_constraintTop_toTopOf="@id/upcomingContestCardCL" />
 
 
                 <ImageButton
                     android:id="@+id/btnExpandUpcomingContest"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:padding="4dp"
                     android:background="@drawable/custom_button_shape"
-
                     android:src="@drawable/baseline_expand_more_24"
                     app:layout_constraintEnd_toEndOf="@id/upcomingContestCardCL"
-                    app:layout_constraintTop_toTopOf="@id/upcomingContestCardCL" />
+                    app:layout_constraintTop_toTopOf="@id/tvUpcomingContest"
+                    app:layout_constraintBottom_toBottomOf="@id/tvUpcomingContest"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvUpcomingContest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-
                     app:layout_constraintEnd_toEndOf="@id/upcomingContestCardCL"
-                    app:layout_constraintStart_toStartOf="@id/upcomingContestCardCL"
                     app:layout_constraintTop_toBottomOf="@+id/tvUpcomingContest"
                     tools:listitem="@layout/item_contest" />
 
@@ -192,7 +194,6 @@
             android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardUseCompatPadding="true"
-
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
             app:layout_constraintTop_toBottomOf="@id/upComingContestCard"
@@ -203,7 +204,7 @@
                 android:id="@+id/recentContestCardCL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/tvRecentContest"
@@ -221,9 +222,9 @@
                 <ImageButton
                     android:id="@+id/btnExpandRecentContest"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:background="@drawable/custom_button_shape"
-
+                    android:padding="4dp"
                     android:src="@drawable/baseline_expand_more_24"
                     app:layout_constraintEnd_toEndOf="@id/recentContestCardCL"
                     app:layout_constraintTop_toTopOf="@id/recentContestCardCL" />

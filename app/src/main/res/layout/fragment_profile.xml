@@ -4,36 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="64dp"
     android:background="@color/background_screen"
+    android:paddingBottom="64dp"
     tools:context=".ui.profile.ProfileFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp">
+        android:layout_gravity="top"
+        android:orientation="vertical">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingAnimation"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="200dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="300dp"
             android:elevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
             app:lottie_autoPlay="true"
             app:lottie_fileName="loading.json"
             app:lottie_loop="true" />
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/completeScreen"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="top|center_horizontal"
             tools:visibility="visible">
 
 
@@ -64,7 +63,8 @@
                     android:id="@+id/profileCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp"
+                    >
 
 
                     <TextView
@@ -136,7 +136,7 @@
                     android:id="@+id/moreInfoCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvMoreInfo"
@@ -148,17 +148,18 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnMoreInfoCardExpand"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnMoreInfoCardExpand" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatImageButton
                         android:id="@+id/btnMoreInfoCardExpand"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:padding="4dp"
                         android:background="@drawable/custom_button_shape"
-
                         android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintEnd_toEndOf="@id/moreInfoCL"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@id/tvMoreInfo"
+                        app:layout_constraintBottom_toBottomOf="@id/tvMoreInfo"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/moreInfoDropDownCL"
@@ -236,7 +237,7 @@
                     android:id="@+id/performanceCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvPerformanceCard"
@@ -248,18 +249,18 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnExpandPerformanceCard"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnExpandPerformanceCard" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/btnExpandPerformanceCard"
-
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:padding="4dp"
                         android:background="@drawable/custom_button_shape"
                         android:src="@drawable/baseline_expand_less_24"
-                        app:layout_constraintBaseline_toBaselineOf="@id/tvPerformanceCard"
                         app:layout_constraintEnd_toEndOf="@id/performanceCL"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@id/tvPerformanceCard"
+                        app:layout_constraintBottom_toBottomOf="@id/tvPerformanceCard"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/performanceDropDownCL"
@@ -359,7 +360,7 @@
                     android:id="@+id/ratingCurveCardCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
 
                     <TextView
@@ -372,18 +373,19 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnExpandRatingCurve"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnExpandRatingCurve" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/btnExpandRatingCurve"
-
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:padding="4dp"
                         android:background="@drawable/custom_button_shape"
                         android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvRatingCurve"
                         app:layout_constraintEnd_toEndOf="@id/ratingCurveCardCL"
-                        app:layout_constraintTop_toTopOf="@id/tvRatingCurve" />
+                        app:layout_constraintTop_toTopOf="@id/tvRatingCurve"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRatingCurve"/>
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/ratingCurve"
@@ -414,7 +416,7 @@
                     android:id="@+id/ratingTableCardCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvRatingTable"
@@ -426,18 +428,19 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnExpandRatingTable"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnExpandRatingTable" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/btnExpandRatingTable"
-
+                        android:padding="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_button_shape"
-                        android:src="@drawable/baseline_expand_more_24"
+                        android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvRatingTable"
                         app:layout_constraintEnd_toEndOf="@id/ratingTableCardCL"
-                        app:layout_constraintTop_toTopOf="@id/tvRatingTable" />
+                        app:layout_constraintTop_toTopOf="@id/tvRatingTable"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRatingTable"/>
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/ratingTable"
@@ -469,7 +472,7 @@
                     android:id="@+id/levelTableCardCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvLevelTable"
@@ -481,18 +484,19 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnExpandLevelTable"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnExpandLevelTable" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/btnExpandLevelTable"
-
+                        android:padding="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_button_shape"
                         android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvLevelTable"
                         app:layout_constraintEnd_toEndOf="@id/levelTableCardCL"
-                        app:layout_constraintTop_toTopOf="@id/tvLevelTable" />
+                        app:layout_constraintTop_toTopOf="@id/tvLevelTable"
+                        app:layout_constraintBottom_toBottomOf="@id/tvLevelTable"/>
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/levelTable"
@@ -523,7 +527,7 @@
                     android:id="@+id/problemTagsCardCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvProblemTags"
@@ -535,18 +539,19 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnExpandProblemTagsChart"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnExpandProblemTagsChart" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/btnExpandProblemTagsChart"
-
+                    android:padding="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_button_shape"
                         android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvProblemTags"
                         app:layout_constraintEnd_toEndOf="@id/problemTagsCardCL"
-                        app:layout_constraintTop_toTopOf="@id/tvProblemTags" />
+                        app:layout_constraintTop_toTopOf="@id/tvProblemTags"
+                        app:layout_constraintBottom_toBottomOf="@id/tvProblemTags"/>
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pieChartProblemTags"
@@ -578,7 +583,7 @@
                     android:id="@+id/languageTagsCardCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvLanguageTagsChart"
@@ -590,18 +595,19 @@
                         app:layout_constraintBottom_toBottomOf="@id/btnExpandLanguageTagsChart"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/btnExpandLanguageTagsChart" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/btnExpandLanguageTagsChart"
-
+    android:padding="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/custom_button_shape"
                         android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvLanguageTagsChart"
                         app:layout_constraintEnd_toEndOf="@id/languageTagsCardCL"
-                        app:layout_constraintTop_toTopOf="@id/languageTagsCardCL" />
+                        app:layout_constraintTop_toTopOf="@id/tvLanguageTagsChart"
+                        app:layout_constraintBottom_toBottomOf="@id/tvLanguageTagsChart"/>
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pieChartLanguage"
@@ -633,7 +639,7 @@
                     android:id="@+id/submissionVerdictsCardCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="2dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tvSubmissionVerdicts"
@@ -650,12 +656,14 @@
                     <ImageButton
                         android:id="@+id/btnExpandSubmissionVerdicts"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:padding="4dp"
                         android:background="@drawable/custom_button_shape"
                         android:src="@drawable/baseline_expand_less_24"
                         app:layout_constraintBaseline_toBaselineOf="@id/tvSubmissionVerdicts"
                         app:layout_constraintEnd_toEndOf="@id/submissionVerdictsCardCL"
-                        app:layout_constraintTop_toTopOf="@id/submissionVerdictsCardCL" />
+                        app:layout_constraintTop_toTopOf="@id/tvSubmissionVerdicts"
+                        app:layout_constraintBottom_toBottomOf="@id/tvSubmissionVerdicts"/>
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pieChartVerdicts"
@@ -670,6 +678,6 @@
             </com.google.android.material.card.MaterialCardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </ScrollView>
