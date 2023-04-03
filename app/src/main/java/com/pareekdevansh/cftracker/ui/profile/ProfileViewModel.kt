@@ -1,5 +1,6 @@
 package com.pareekdevansh.cftracker.ui.profile
 
+import android.util.Log
 import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,11 +35,11 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     val bestRank get() = _bestRank
     val contestGiven get() = _contestGiven
 
-    private val _rankColor: MutableLiveData<Int> = MutableLiveData()
-    val rankColor: LiveData<Int> get() = _rankColor
+    private val _currentRatingColor: MutableLiveData<Int> = MutableLiveData()
+    val currentRatingColor: LiveData<Int> get() = _currentRatingColor
 
-    private val _maxRankColor: MutableLiveData<Int> = MutableLiveData()
-    val maxRankColor: LiveData<Int> get() = _maxRankColor
+    private val _maxRatingColor: MutableLiveData<Int> = MutableLiveData()
+    val maxRatingColor: LiveData<Int> get() = _maxRatingColor
 
     private val _userRatingResponse: MutableLiveData<Response<UserRatingResponse>> =
         MutableLiveData()
@@ -62,8 +63,8 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
             if (userQuery.toString().isNotEmpty()) {
                 val response = repository.getUser(listOf("devanshpareek"))
 //                val response = repository.getUser(listOf(userQuery.toString()))
-                _rankColor.value = response.body()?.user?.get(0)?.let { updateColor(it.rating) }
-                _maxRankColor.value =
+                _currentRatingColor.value = response.body()?.user?.get(0)?.let { updateColor(it.rating) }
+                _maxRatingColor.value =
                     response.body()?.user?.get(0)?.let { updateColor(it.maxRating) }
                 _userResponseModel.value = response
             }

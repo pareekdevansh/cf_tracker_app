@@ -2,10 +2,12 @@ package com.pareekdevansh.cftracker.ui.profile
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -98,13 +100,13 @@ class ProfileFragment : Fragment() {
 
                     for (submission: Submission in it.submissions) {
                         if (!submissionLanguage.containsKey(submission.programmingLanguage))
-                            submissionLanguage[submission.programmingLanguage] = 0
+                            submissionLanguage[submission.programmingLanguage] = 1
                         else
                             submissionLanguage[submission.programmingLanguage] =
                                 submissionLanguage[submission.programmingLanguage]!! + 1
 
                         if (!submissionVerdict.containsKey(submission.verdict))
-                            submissionVerdict[submission.verdict] = 0
+                            submissionVerdict[submission.verdict] = 1
                         else
                             submissionVerdict[submission.verdict] =
                                 submissionVerdict[submission.verdict]!! + 1
@@ -141,7 +143,7 @@ class ProfileFragment : Fragment() {
                             visibility = View.GONE
                             pauseAnimation()
                         }
-                        binding.apply { completeScreen.visibility = View.VISIBLE }
+                        binding.completeScreen.visibility = View.VISIBLE
                         profileViewModel.lineDataSet.observe(viewLifecycleOwner) {
                             binding.ratingCurve.data = LineData(it)
                             binding.ratingCurve.invalidate()
@@ -213,9 +215,9 @@ class ProfileFragment : Fragment() {
         }
 
         binding.btnExpandRatingCurve.setOnClickListener {
-            var viewVisibility: Int
-            var imageId: Int
-            var anim: Int
+            val viewVisibility: Int
+            val imageId: Int
+            val anim: Int
             if (ratingCurveExpanded) {
                 anim = R.anim.slide_up_anim
                 viewVisibility = View.GONE
@@ -359,7 +361,7 @@ class ProfileFragment : Fragment() {
     private fun generate100Colors() {
         CoroutineScope(Dispatchers.IO).launch {
             while (colorSet.size < 100) {
-                val color = Color.argb(255, (1..256).random(), (1..256).random(), (1..256).random())
+                val color = Color.argb(255, (100..256).random(), (100..256).random(), (100..256).random())
                 if (color == Color.WHITE || color == Color.BLACK)
                     continue
                 colorSet.add(color)
@@ -571,19 +573,19 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateTextFieldColor() {
-        profileViewModel.rankColor.observe(viewLifecycleOwner) { rankColor ->
+        profileViewModel.currentRatingColor.observe(viewLifecycleOwner) { rankColor ->
             binding.apply {
-                firstName.setTextColor(rankColor)
-                lastName.setTextColor(rankColor)
-                handle.setTextColor(rankColor)
-                rating.setTextColor(rankColor)
-                rank.setTextColor(rankColor)
+                firstName.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                lastName.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                handle.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                rating.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                rank.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
             }
         }
-        profileViewModel.maxRankColor.observe(viewLifecycleOwner) { rankColor ->
+        profileViewModel.maxRatingColor.observe(viewLifecycleOwner) { rankColor ->
             binding.apply {
-                maxRank.setTextColor(rankColor)
-                maxRating.setTextColor(rankColor)
+                maxRank.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                maxRating.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
             }
         }
     }
