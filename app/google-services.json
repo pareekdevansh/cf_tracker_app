@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "236046745511",
+    "project_id": "cf-tracker-503cb",
+    "storage_bucket": "cf-tracker-503cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236046745511:android:71fd2cd0e74d0f5ef3c082",
+        "android_client_info": {
+          "package_name": "com.pareekdevansh.cftracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236046745511-ogbkuet7un8qf1s52ituc8mslj0so0im.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pareekdevansh.cftracker",
+            "certificate_hash": "76dae0be22d25840d2ad4bd72c3fb6efd94f7b3b"
+          }
+        },
+        {
+          "client_id": "236046745511-9gd57ovg2rp1o2v44musm8jhtadv03u0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD14QhDvK-nB-_HAafpF5Js8trX5jOkUbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236046745511-9gd57ovg2rp1o2v44musm8jhtadv03u0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

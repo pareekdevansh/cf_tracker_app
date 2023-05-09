@@ -1,6 +1,5 @@
 package com.pareekdevansh.cftracker.ui.profile
 
-import android.util.Log
 import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,13 +11,13 @@ import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.models.SubmissionsResponse
 import com.pareekdevansh.cftracker.models.UserRatingResponse
 import com.pareekdevansh.cftracker.models.UserResponseModel
-import com.pareekdevansh.cftracker.repository.Repository
+import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.lang.Integer.min
 
 
-class ProfileViewModel(private val repository: Repository) : ViewModel() {
+class ProfileViewModel(private val CFRepository: CFRepository) : ViewModel() {
 
     companion object {
         const val CHAR_LABEL = "Codeforces Rating Curve"
@@ -61,9 +60,10 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     fun getUsers() {
         viewModelScope.launch {
             if (userQuery.toString().isNotEmpty()) {
-                val response = repository.getUser(listOf("devanshpareek"))
+                val response = CFRepository.getUser(listOf("devanshpareek"))
 //                val response = repository.getUser(listOf(userQuery.toString()))
-                _currentRatingColor.value = response.body()?.user?.get(0)?.let { updateColor(it.rating) }
+                _currentRatingColor.value =
+                    response.body()?.user?.get(0)?.let { updateColor(it.rating) }
                 _maxRatingColor.value =
                     response.body()?.user?.get(0)?.let { updateColor(it.maxRating) }
                 _userResponseModel.value = response
@@ -73,7 +73,7 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
 
     fun getUserRatings() {
         viewModelScope.launch {
-            val response = repository.getUserRatings("devanshpareek")
+            val response = CFRepository.getUserRatings("devanshpareek")
             _userRatingResponse.postValue(response)
             response.body()?.ratingChangeList.let {
                 if (it != null)
@@ -101,7 +101,7 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
 
     fun getSubmissionsList(userId: String) {
         viewModelScope.launch {
-            val response = repository.getSubmissionsList(userId)
+            val response = CFRepository.getSubmissionsList(userId)
             if (response.isSuccessful) {
                 _submissionResponse.postValue(response)
             }

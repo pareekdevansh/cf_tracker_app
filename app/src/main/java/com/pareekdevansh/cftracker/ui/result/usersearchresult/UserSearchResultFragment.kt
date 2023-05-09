@@ -18,10 +18,9 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.pareekdevansh.cftracker.databinding.FragmentUserSearchResultBinding
 import com.pareekdevansh.cftracker.models.Submission
 import com.pareekdevansh.cftracker.models.User
-import com.pareekdevansh.cftracker.repository.Repository
+import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.internal.artificialFrame
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,14 +30,14 @@ class UserSearchResultFragment : Fragment() {
     private var _binding: FragmentUserSearchResultBinding? = null
     val binding get() = _binding!!
     lateinit var userSearchResultViewModel: UserSearchResultViewModel
-    val repository = Repository()
+    val CFRepository = CFRepository()
     private var colorSet = mutableListOf<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val userSearchResultViewModelFactory = UserSearchResultViewModelFactory(repository)
+        val userSearchResultViewModelFactory = UserSearchResultViewModelFactory(CFRepository)
         userSearchResultViewModel = ViewModelProvider(
             this,
             userSearchResultViewModelFactory
@@ -398,8 +397,8 @@ class UserSearchResultFragment : Fragment() {
             contribution.text = "Contribution: " + user.contribution.toString()
             firstName.text = user.firstName
             lastName.text = user.lastName
-            handle.text = "Handle: " + user.handle
-            rating.text = "Rating: " + user.rating.toString()
+            handle.text = "Handle: ${user.handle}"
+            rating.text = "Rating: ${user.rating}"
             rank.text = "Rank: " + user.rank
             maxRating.text = "Max Rating: " + user.maxRating.toString()
             maxRank.text = "Max Rank: " + user.maxRank

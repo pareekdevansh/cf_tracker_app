@@ -2,10 +2,7 @@ package com.pareekdevansh.cftracker.ui.profile
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,7 +17,7 @@ import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.databinding.FragmentProfileBinding
 import com.pareekdevansh.cftracker.models.Submission
 import com.pareekdevansh.cftracker.models.User
-import com.pareekdevansh.cftracker.repository.Repository
+import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,7 +32,7 @@ class ProfileFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     lateinit var profileViewModel: ProfileViewModel
-    val repository = Repository()
+    val CFRepository = CFRepository()
     private var colorSet = mutableListOf<Int>()
     private var moreInfoCardExpanded = true
     private var performanceCardExpanded = true
@@ -46,13 +43,14 @@ class ProfileFragment : Fragment() {
     private var languageTagsChartExpanded = true
     private var submissionVerdictsExpanded = true
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val profileViewModelFactory =
-            ProfileViewModelFactory(repository)
+            ProfileViewModelFactory(CFRepository)
         profileViewModel =
             ViewModelProvider(this, profileViewModelFactory)[ProfileViewModel::class.java]
 
@@ -153,7 +151,7 @@ class ProfileFragment : Fragment() {
                         prepareLevelTable(problemIndexes)
                         prepareLanguageChart(submissionLanguage)
                         prepareTagsChart(problemTags)
-                        prepareVerdictsChart(submissionVerdict)
+                        prepareSubmissionVerdictsChart(submissionVerdict)
                     }
                 }
 
@@ -361,7 +359,8 @@ class ProfileFragment : Fragment() {
     private fun generate100Colors() {
         CoroutineScope(Dispatchers.IO).launch {
             while (colorSet.size < 100) {
-                val color = Color.argb(255, (100..256).random(), (100..256).random(), (100..256).random())
+                val color =
+                    Color.argb(255, (100..256).random(), (100..256).random(), (100..256).random())
                 if (color == Color.WHITE || color == Color.BLACK)
                     continue
                 colorSet.add(color)
@@ -380,7 +379,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun prepareVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
+    private fun prepareSubmissionVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
         val entries: MutableList<PieEntry> = mutableListOf()
         val label_entries: MutableList<String> = mutableListOf()
 
@@ -391,8 +390,15 @@ class ProfileFragment : Fragment() {
         val pieDataSet = PieDataSet(entries, "Submission Verdicts")
         pieDataSet.apply {
             colors = colorSet
+            valueTextSize = 14f
             valueTextColor = Color.BLACK;
             sliceSpace = 1f;
+            xValuePosition = (PieDataSet.ValuePosition.OUTSIDE_SLICE)
+            valueLinePart1OffsetPercentage = 10f
+            valueLinePart1Length = 0.1f
+
+            valueLinePart2Length = 0.4f
+
         }
         val pieData = PieData(pieDataSet)
 
@@ -405,12 +411,18 @@ class ProfileFragment : Fragment() {
             setEntryLabelTextSize(12f)
             setEntryLabelColor(R.color.black)
             centerText = "Submission Vedicts"
+            dragDecelerationFrictionCoef = .9f
+            isHighlightPerTapEnabled = true
+            rotationAngle = 0f
             setCenterTextSize(18f)
-
             data = pieData
+
             invalidate()
+
             animateY(2000, Easing.EaseInCirc)
+            setOnChartValueSelectedListener(PieChartOnChartValueSelectedListener(requireContext()))
         }
+
     }
 
     private fun prepareTagsChart(problemTags: MutableMap<String, Int>) {
@@ -590,6 +602,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+
     private fun updateProfileCard(user: User) {
         binding.apply {
             contribution.text = "Contribution: " + user.contribution.toString()
@@ -603,6 +616,7 @@ class ProfileFragment : Fragment() {
             city.text = "City: " + user.city
             country.text = "Country: " + user.country
             organization.text = "Organization: " + user.organization
+            // TODO : registrating time show
             registrationTimeSeconds.visibility = View.GONE
 
         }

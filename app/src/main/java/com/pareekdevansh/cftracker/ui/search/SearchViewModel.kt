@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.models.UserResponseModel
-import com.pareekdevansh.cftracker.repository.Repository
+import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class SearchViewModel(private val repository: Repository) : ViewModel() {
+class SearchViewModel(private val CFRepository: CFRepository) : ViewModel() {
 
     // search user by user handle , search contest by contest name , search a blog
     // search user
@@ -24,7 +24,7 @@ class SearchViewModel(private val repository: Repository) : ViewModel() {
 
     fun searchUser(userID: String){
         viewModelScope.launch {
-            val response = repository.getUser(listOf(userID))
+            val response = CFRepository.getUser(listOf(userID))
             _userResponseModel.postValue(response)
             response.body()?.user?.get(0)?.rating?.let {
                 _rankColor.postValue(updateColor(it))

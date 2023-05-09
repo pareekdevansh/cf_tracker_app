@@ -11,11 +11,11 @@ import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.models.SubmissionsResponse
 import com.pareekdevansh.cftracker.models.UserRatingResponse
 import com.pareekdevansh.cftracker.models.UserResponseModel
-import com.pareekdevansh.cftracker.repository.Repository
+import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class UserSearchResultViewModel(private val repository: Repository) : ViewModel() {
+class UserSearchResultViewModel(private val CFRepository: CFRepository) : ViewModel() {
     companion object {
         const val CHAR_LABEL = "Codeforces Rating Curve"
     }
@@ -59,7 +59,7 @@ class UserSearchResultViewModel(private val repository: Repository) : ViewModel(
     fun getUsers(userId: String) {
         viewModelScope.launch {
             if (userQuery.toString().isNotEmpty()) {
-                val response = repository.getUser(listOf(userId))
+                val response = CFRepository.getUser(listOf(userId))
 //                val response = repository.getUser(listOf(userQuery.toString()))
                 if(response.body()?.user == null ){
                     userNotFound.postValue(true)
@@ -74,7 +74,7 @@ class UserSearchResultViewModel(private val repository: Repository) : ViewModel(
 
     fun getUserRatings(userId: String) {
         viewModelScope.launch {
-            val response = repository.getUserRatings(userId)
+            val response = CFRepository.getUserRatings(userId)
             _userRatingResponse.postValue(response)
             response.body()?.ratingChangeList.let {
                 if (it != null)
@@ -102,7 +102,7 @@ class UserSearchResultViewModel(private val repository: Repository) : ViewModel(
 
     fun getSubmissionsList(userId: String) {
         viewModelScope.launch {
-            val response = repository.getSubmissionsList(userId)
+            val response = CFRepository.getSubmissionsList(userId)
             if (response.isSuccessful) {
                 _submissionResponse.postValue(response)
             }

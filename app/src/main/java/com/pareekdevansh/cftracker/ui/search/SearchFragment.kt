@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.pareekdevansh.cftracker.databinding.FragmentSearchBinding
-import com.pareekdevansh.cftracker.repository.Repository
+import com.pareekdevansh.cftracker.repository.CFRepository
 
 
 class SearchFragment : Fragment() {
 
-    private val repository = Repository()
+    private val CFRepository = CFRepository()
     private lateinit var searchViewModel : SearchViewModel
     private var _binding: FragmentSearchBinding
     ? = null
@@ -28,7 +28,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val searchViewModelProvider = SearchViewModelFactory(repository)
+        val searchViewModelProvider = SearchViewModelFactory(CFRepository)
         searchViewModel =
             ViewModelProvider(this, searchViewModelProvider)[SearchViewModel::class.java]
 

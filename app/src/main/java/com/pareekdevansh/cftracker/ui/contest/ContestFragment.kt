@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,10 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pareekdevansh.cftracker.R
 import com.pareekdevansh.cftracker.adapter.ContestAdapter
 import com.pareekdevansh.cftracker.databinding.FragmentContestBinding
-import com.pareekdevansh.cftracker.repository.Repository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlin.math.abs
 
 
@@ -40,7 +36,7 @@ class ContestFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val repository = Repository()
+    private val CFRepository = CFRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +44,7 @@ class ContestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val contestsViewModelFactory = ContestViewModelFactory(repository)
+        val contestsViewModelFactory = ContestViewModelFactory(CFRepository)
         contestViewModel =
             ViewModelProvider(this, contestsViewModelFactory)[ContestViewModel::class.java]
 
