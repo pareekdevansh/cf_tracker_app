@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.pareekdevansh.cftracker.databinding.FragmentSearchBinding
 import com.pareekdevansh.cftracker.repository.CFRepository
 
-
+// TODO : search a user / problem
 class SearchFragment : Fragment() {
 
     private val CFRepository = CFRepository()
@@ -47,7 +47,7 @@ class SearchFragment : Fragment() {
         binding.searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query.let {
-                            var userId = query?.filterNot { it.isWhitespace() }
+                            val userId = query?.filterNot { it.isWhitespace() }
                             val direction =
                                 SearchFragmentDirections.actionNavigationSearchToUserSearchResultFragment(
                                     userId

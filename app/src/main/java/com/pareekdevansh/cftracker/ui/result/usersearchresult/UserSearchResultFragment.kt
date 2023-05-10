@@ -1,11 +1,12 @@
 package com.pareekdevansh.cftracker.ui.result.usersearchresult
 
-import android.R
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -13,12 +14,19 @@ import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.pareekdevansh.cftracker.databinding.FragmentUserSearchResultBinding
 import com.pareekdevansh.cftracker.models.Submission
 import com.pareekdevansh.cftracker.models.User
 import com.pareekdevansh.cftracker.repository.CFRepository
+import com.pareekdevansh.cftracker.ui.profile.PieChartOnChartValueSelectedListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,16 +36,24 @@ class UserSearchResultFragment : Fragment() {
 
     private val args: UserSearchResultFragmentArgs by navArgs()
     private var _binding: FragmentUserSearchResultBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
     lateinit var userSearchResultViewModel: UserSearchResultViewModel
-    val CFRepository = CFRepository()
+    private val cfRepository = CFRepository()
     private var colorSet = mutableListOf<Int>()
+    private var moreInfoCardExpanded = true
+    private var performanceCardExpanded = true
+    private var ratingCurveExpanded = true
+    private var ratingTableExpanded = true
+    private var levelTableExpanded = true
+    private var problemTagsChartExpanded = true
+    private var languageTagsChartExpanded = true
+    private var submissionVerdictsExpanded = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val userSearchResultViewModelFactory = UserSearchResultViewModelFactory(CFRepository)
+        val userSearchResultViewModelFactory = UserSearchResultViewModelFactory(cfRepository)
         userSearchResultViewModel = ViewModelProvider(
             this,
             userSearchResultViewModelFactory
@@ -59,6 +75,7 @@ class UserSearchResultFragment : Fragment() {
         generate100Colors()
 
 
+
         if (userId != null) {
             userSearchResultViewModel.getUsers(userId)
             userSearchResultViewModel.getUserRatings(userId)
@@ -66,13 +83,17 @@ class UserSearchResultFragment : Fragment() {
 
         }
 
-        userSearchResultViewModel.userNotFound.observe(viewLifecycleOwner){
-            if(it ){
-                //TODO : user not found , show animation
+        binding.ivStar.setOnClickListener {
+            // TODO : if starred already unstar otherwise star it
+            val starred = false
+            if(starred )
+            {
 
             }
+            else{
+                userSearchResultViewModel.addFriend(userId)
+            }
         }
-
 
         userSearchResultViewModel.userResponseModel.observe(viewLifecycleOwner) { response ->
             if (response.isSuccessful) {
@@ -88,6 +109,7 @@ class UserSearchResultFragment : Fragment() {
                 updatePerformanceCard()
 
             }
+
         }
 
         userSearchResultViewModel.submissionsResponse.observe(viewLifecycleOwner) { response ->
@@ -97,13 +119,13 @@ class UserSearchResultFragment : Fragment() {
 
                     for (submission: Submission in it.submissions) {
                         if (!submissionLanguage.containsKey(submission.programmingLanguage))
-                            submissionLanguage[submission.programmingLanguage] = 0
+                            submissionLanguage[submission.programmingLanguage] = 1
                         else
                             submissionLanguage[submission.programmingLanguage] =
                                 submissionLanguage[submission.programmingLanguage]!! + 1
 
                         if (!submissionVerdict.containsKey(submission.verdict))
-                            submissionVerdict[submission.verdict] = 0
+                            submissionVerdict[submission.verdict] = 1
                         else
                             submissionVerdict[submission.verdict] =
                                 submissionVerdict[submission.verdict]!! + 1
@@ -140,6 +162,7 @@ class UserSearchResultFragment : Fragment() {
                             visibility = View.GONE
                             pauseAnimation()
                         }
+                        binding.completeScreen.visibility = View.VISIBLE
                         userSearchResultViewModel.lineDataSet.observe(viewLifecycleOwner) {
                             binding.ratingCurve.data = LineData(it)
                             binding.ratingCurve.invalidate()
@@ -149,7 +172,7 @@ class UserSearchResultFragment : Fragment() {
                         prepareLevelTable(problemIndexes)
                         prepareLanguageChart(submissionLanguage)
                         prepareTagsChart(problemTags)
-                        prepareVerdictsChart(submissionVerdict)
+                        prepareSubmissionVerdictsChart(submissionVerdict)
                     }
                 }
 
@@ -157,12 +180,207 @@ class UserSearchResultFragment : Fragment() {
 
         }
 
+        binding.btnMoreInfoCardExpand.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (moreInfoCardExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                moreInfoDropDownCL.visibility = viewVisibility
+                moreInfoDropDownCL.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnMoreInfoCardExpand.setImageResource(imageId)
+            }
+            moreInfoCardExpanded = !moreInfoCardExpanded
+
+        }
+
+        binding.btnExpandPerformanceCard.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (performanceCardExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                performanceDropDownCL.visibility = viewVisibility
+                performanceDropDownCL.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandPerformanceCard.setImageResource(imageId)
+            }
+            performanceCardExpanded = !performanceCardExpanded
+        }
+
+        binding.btnExpandRatingCurve.setOnClickListener {
+            val viewVisibility: Int
+            val imageId: Int
+            val anim: Int
+            if (ratingCurveExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                ratingCurve.visibility = viewVisibility
+                ratingCurve.startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
+                btnExpandRatingCurve.setImageResource(imageId)
+            }
+            ratingCurveExpanded = !ratingCurveExpanded
+        }
+
+        binding.btnExpandRatingTable.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (ratingTableExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                ratingTable.visibility = viewVisibility
+                ratingTable.startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
+                btnExpandRatingTable.setImageResource(imageId)
+            }
+            ratingTableExpanded = !ratingTableExpanded
+        }
+
+        binding.btnExpandLevelTable.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (levelTableExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                levelTable.visibility = viewVisibility
+                levelTable.startAnimation(AnimationUtils.loadAnimation(requireContext(), anim))
+                btnExpandLevelTable.setImageResource(imageId)
+            }
+            levelTableExpanded = !levelTableExpanded
+        }
+
+        binding.btnExpandProblemTagsChart.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (problemTagsChartExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                pieChartProblemTags.visibility = viewVisibility
+                pieChartProblemTags.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandProblemTagsChart.setImageResource(imageId)
+            }
+            problemTagsChartExpanded = !problemTagsChartExpanded
+        }
+
+        binding.btnExpandLanguageTagsChart.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (languageTagsChartExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                pieChartLanguage.visibility = viewVisibility
+                pieChartLanguage.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandLanguageTagsChart.setImageResource(imageId)
+            }
+            languageTagsChartExpanded = !languageTagsChartExpanded
+        }
+
+        binding.btnExpandSubmissionVerdicts.setOnClickListener {
+            var viewVisibility: Int
+            var imageId: Int
+            var anim: Int
+            if (submissionVerdictsExpanded) {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_up_anim
+                viewVisibility = View.GONE
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_more_24
+            } else {
+                anim = com.pareekdevansh.cftracker.R.anim.slide_down_anim
+                imageId = com.pareekdevansh.cftracker.R.drawable.baseline_expand_less_24
+                viewVisibility = View.VISIBLE
+            }
+            binding.apply {
+                pieChartVerdicts.visibility = viewVisibility
+                pieChartVerdicts.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        anim
+                    )
+                )
+                btnExpandSubmissionVerdicts.setImageResource(imageId)
+            }
+            submissionVerdictsExpanded = !submissionVerdictsExpanded
+        }
+
     }
 
     private fun generate100Colors() {
         CoroutineScope(Dispatchers.IO).launch {
             while (colorSet.size < 100) {
-                val color = Color.argb(255, (1..256).random(), (1..256).random(), (1..256).random())
+                val color =
+                    Color.argb(255, (100..256).random(), (100..256).random(), (100..256).random())
                 if (color == Color.WHITE || color == Color.BLACK)
                     continue
                 colorSet.add(color)
@@ -181,7 +399,7 @@ class UserSearchResultFragment : Fragment() {
         }
     }
 
-    private fun prepareVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
+    private fun prepareSubmissionVerdictsChart(submissionVerdict: MutableMap<String, Int>) {
         val entries: MutableList<PieEntry> = mutableListOf()
         val label_entries: MutableList<String> = mutableListOf()
 
@@ -192,8 +410,15 @@ class UserSearchResultFragment : Fragment() {
         val pieDataSet = PieDataSet(entries, "Submission Verdicts")
         pieDataSet.apply {
             colors = colorSet
+            valueTextSize = 14f
             valueTextColor = Color.BLACK;
             sliceSpace = 1f;
+            xValuePosition = (PieDataSet.ValuePosition.OUTSIDE_SLICE)
+            valueLinePart1OffsetPercentage = 10f
+            valueLinePart1Length = 0.1f
+
+            valueLinePart2Length = 0.4f
+
         }
         val pieData = PieData(pieDataSet)
 
@@ -204,14 +429,20 @@ class UserSearchResultFragment : Fragment() {
             legend.isEnabled = false
             isDrawHoleEnabled = true
             setEntryLabelTextSize(12f)
-            setEntryLabelColor(R.color.black)
+            setEntryLabelColor(com.pareekdevansh.cftracker.R.color.black)
             centerText = "Submission Vedicts"
+            dragDecelerationFrictionCoef = .9f
+            isHighlightPerTapEnabled = true
+            rotationAngle = 0f
             setCenterTextSize(18f)
-
             data = pieData
+
             invalidate()
+
             animateY(2000, Easing.EaseInCirc)
+            setOnChartValueSelectedListener(PieChartOnChartValueSelectedListener(requireContext()))
         }
+
     }
 
     private fun prepareTagsChart(problemTags: MutableMap<String, Int>) {
@@ -231,7 +462,7 @@ class UserSearchResultFragment : Fragment() {
             isDrawHoleEnabled = true
             setDrawEntryLabels(true)
             setEntryLabelTextSize(12f)
-            setEntryLabelColor(R.color.black)
+            setEntryLabelColor(com.pareekdevansh.cftracker.R.color.black)
             centerText = "Problem Tags"
             setCenterTextSize(20f)
             legend.isEnabled = false
@@ -257,7 +488,7 @@ class UserSearchResultFragment : Fragment() {
             description = null
             isDrawHoleEnabled = true
             setEntryLabelTextSize(12f)
-            setEntryLabelColor(R.color.black)
+            setEntryLabelColor(com.pareekdevansh.cftracker.R.color.black)
             centerText = "Languages used"
             setCenterTextSize(20f)
             data = pieData
@@ -374,19 +605,19 @@ class UserSearchResultFragment : Fragment() {
     }
 
     private fun updateTextFieldColor() {
-        userSearchResultViewModel.rankColor.observe(viewLifecycleOwner) { rankColor ->
+        userSearchResultViewModel.currentRatingColor.observe(viewLifecycleOwner) { rankColor ->
             binding.apply {
-                firstName.setTextColor(rankColor)
-                lastName.setTextColor(rankColor)
-                handle.setTextColor(rankColor)
-                rating.setTextColor(rankColor)
-                rank.setTextColor(rankColor)
+                firstName.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                lastName.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                handle.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                rating.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                rank.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
             }
         }
-        userSearchResultViewModel.maxRankColor.observe(viewLifecycleOwner) { rankColor ->
+        userSearchResultViewModel.maxRatingColor.observe(viewLifecycleOwner) { rankColor ->
             binding.apply {
-                maxRank.setTextColor(rankColor)
-                maxRating.setTextColor(rankColor)
+                maxRank.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
+                maxRating.setTextColor(ContextCompat.getColor(requireContext(), rankColor))
             }
         }
     }
@@ -397,14 +628,15 @@ class UserSearchResultFragment : Fragment() {
             contribution.text = "Contribution: " + user.contribution.toString()
             firstName.text = user.firstName
             lastName.text = user.lastName
-            handle.text = "Handle: ${user.handle}"
-            rating.text = "Rating: ${user.rating}"
+            handle.text = "@" + user.handle
+            rating.text = "Rating: " + user.rating.toString()
             rank.text = "Rank: " + user.rank
             maxRating.text = "Max Rating: " + user.maxRating.toString()
             maxRank.text = "Max Rank: " + user.maxRank
             city.text = "City: " + user.city
             country.text = "Country: " + user.country
             organization.text = "Organization: " + user.organization
+            // TODO : registrating time show
             registrationTimeSeconds.visibility = View.GONE
 
         }

@@ -51,13 +51,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.about -> {
-                val fragment =
-                    AboutFragment() // Replace MyNewFragment with the name of your fragment class
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.nav_host_fragment_activity_main , fragment)
-                    addToBackStack(null)
-                    commit()
-                }
+                findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.aboutFragment)
             }
             R.id.sign_out -> {
                 finish()

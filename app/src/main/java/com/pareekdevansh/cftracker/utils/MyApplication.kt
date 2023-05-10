@@ -1,4 +1,4 @@
-package com.pareekdevansh.cftracker
+package com.pareekdevansh.cftracker.utils
 
 import android.app.Application
 import android.content.Context

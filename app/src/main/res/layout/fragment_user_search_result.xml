@@ -7,595 +7,684 @@
     android:paddingBottom="64dp"
     tools:context=".ui.result.usersearchresult.UserSearchResultFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp">
+        android:layout_gravity="top"
+        android:orientation="vertical">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loadingAnimation"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="200dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="300dp"
             android:elevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_fileName="loading.json"
             app:lottie_loop="true" />
-        <ImageView
-            android:id="@+id/avatar"
-            android:layout_width="0dp"
-            android:layout_height="250dp"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/profileCard"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/completeScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="8dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/avatar">
+            android:layout_gravity="top|center_horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/profileCL"
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profileCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:layout_marginTop="8dp"
+                android:elevation="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar">
 
-
-                <TextView
-                    android:id="@+id/handle"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="handle: "
-                    app:layout_constraintStart_toStartOf="@+id/profileCL"
-                    app:layout_constraintTop_toTopOf="@+id/profileCL" />
-
-                <TextView
-                    android:id="@+id/firstName"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="firstName: "
-                    app:layout_constraintStart_toStartOf="@id/profileCL"
-                    app:layout_constraintTop_toBottomOf="@id/handle" />
-
-                <TextView
-                    android:id="@+id/lastName"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="lastName: "
-                    app:layout_constraintBaseline_toBaselineOf="@id/firstName"
-                    app:layout_constraintBottom_toBottomOf="@+id/firstName"
-                    app:layout_constraintStart_toEndOf="@+id/firstName" />
-
-
-                <TextView
-                    android:id="@+id/rank"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="rank: "
-                    app:layout_constraintStart_toStartOf="@+id/profileCL"
-                    app:layout_constraintTop_toBottomOf="@+id/firstName" />
-
-                <TextView
-                    android:id="@+id/rating"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="rating: "
-                    app:layout_constraintStart_toStartOf="@+id/profileCL"
-                    app:layout_constraintTop_toBottomOf="@+id/rank" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/moreInfoCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileCard">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/moreInfoCL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp">
-
-                <TextView
-                    android:id="@+id/tvMoreInfo"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="More Info"
-
-                    app:layout_constraintEnd_toStartOf="@id/btnMoreInfoCardExpand"
-                    app:layout_constraintStart_toStartOf="@id/moreInfoCL"
-                    app:layout_constraintTop_toTopOf="@id/moreInfoCL" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/btnMoreInfoCardExpand"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintEnd_toEndOf="@id/moreInfoCL"
-                    app:layout_constraintTop_toTopOf="@id/tvMoreInfo" />
-
-                <TextView
-                    android:id="@+id/contribution"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="contribution: "
-                    app:layout_constraintStart_toStartOf="@id/moreInfoCL"
-                    app:layout_constraintTop_toBottomOf="@id/tvMoreInfo" />
-
-                <TextView
-                    android:id="@+id/city"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="city: "
-                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
-                    app:layout_constraintTop_toBottomOf="@+id/contribution" />
-
-                <TextView
-                    android:id="@+id/country"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="country: "
-                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
-                    app:layout_constraintTop_toBottomOf="@+id/city" />
-
-                <TextView
-                    android:id="@+id/organization"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="organization: "
-                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
-                    app:layout_constraintTop_toBottomOf="@+id/country" />
-
-                <TextView
-                    android:id="@+id/registrationTimeSeconds"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="registrationTimeSeconds: "
-                    app:layout_constraintStart_toStartOf="@+id/moreInfoCL"
-                    app:layout_constraintTop_toBottomOf="@+id/organization" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/performanceCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/moreInfoCard">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/performanceCL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp">
-
-                <TextView
-                    android:id="@+id/tvPerformanceCard"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Contest History"
-                    app:layout_constraintStart_toStartOf="@id/performanceCL"
-                    app:layout_constraintTop_toTopOf="@id/performanceCL" />
-
-                <ImageButton
-                    android:id="@+id/btnExpandPerformanceCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvPerformanceCard"
-                    app:layout_constraintEnd_toEndOf="@id/performanceCL"
-                    app:layout_constraintTop_toTopOf="@id/tvPerformanceCard" />
-
-                <TextView
-                    android:id="@+id/contestGiven"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Contest Given: "
-                    app:layout_constraintStart_toStartOf="@+id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@+id/tvPerformanceCard"
-
-                    />
-
-                <TextView
-                    android:id="@+id/maxRank"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="maxRank: "
-                    app:layout_constraintStart_toStartOf="@id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@id/contestGiven" />
-
-                <TextView
-                    android:id="@+id/maxRating"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="maxRating: "
-                    app:layout_constraintStart_toStartOf="@+id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@+id/maxRank" />
-
-                <TextView
-                    android:id="@+id/minRatingChange"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Minimum Delta : "
-                    app:layout_constraintStart_toStartOf="@id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@id/maxRating" />
-
-                <TextView
-                    android:id="@+id/maxRatingChange"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Maximum Delta: "
-                    app:layout_constraintStart_toStartOf="@id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@id/minRatingChange" />
-
-                <TextView
-                    android:id="@+id/bestRank"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="rank: "
-                    app:layout_constraintStart_toStartOf="@id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@id/maxRatingChange" />
-
-                <TextView
-                    android:id="@+id/worstRank"
-                    style="@style/normal_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="worst Rank: "
-                    app:layout_constraintStart_toStartOf="@id/performanceCL"
-                    app:layout_constraintTop_toBottomOf="@id/bestRank" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/ratingCurveCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/performanceCard">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ratingCurveCardCL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="2dp">
-
-
-                <TextView
-                    android:id="@+id/tvRatingCurve"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rating Curve"
-                    app:layout_constraintStart_toStartOf="@id/ratingCurveCardCL"
-                    app:layout_constraintTop_toTopOf="@id/ratingCurveCardCL" />
-
-                <ImageButton
-                    android:id="@+id/btnExpandRatingCurve"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvRatingCurve"
-                    app:layout_constraintEnd_toEndOf="@id/ratingCurveCardCL"
-                    app:layout_constraintTop_toTopOf="@id/tvRatingCurve" />
-
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/ratingCurve"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profileCL"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintEnd_toEndOf="@id/ratingCurveCardCL"
-                    app:layout_constraintStart_toStartOf="@id/ratingCurveCardCL"
-                    app:layout_constraintTop_toBottomOf="@id/tvRatingCurve" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <ImageView
+                        android:id="@+id/ivStar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/star"
+                        android:clickable="true"
+                        app:layout_constraintBottom_toBottomOf="@id/handle"
+                        app:layout_constraintStart_toStartOf="@id/profileCL"
+                        app:layout_constraintTop_toTopOf="@id/handle" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/ratingTableCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingCurveCard">
+                    <TextView
+                        android:id="@+id/handle"
+                        style="@style/normal_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="handle: "
+                        app:layout_constraintStart_toEndOf="@id/ivStar"
+                        app:layout_constraintTop_toTopOf="@+id/profileCL" />
+
+                    <TextView
+                        android:id="@+id/firstName"
+                        style="@style/normal_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="firstName: "
+                        app:layout_constraintStart_toStartOf="@id/profileCL"
+                        app:layout_constraintTop_toBottomOf="@id/handle" />
+
+                    <TextView
+                        android:id="@+id/lastName"
+                        style="@style/normal_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="lastName: "
+                        app:layout_constraintBaseline_toBaselineOf="@id/firstName"
+                        app:layout_constraintBottom_toBottomOf="@+id/firstName"
+                        app:layout_constraintStart_toEndOf="@+id/firstName" />
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ratingTableCardCL"
+                    <TextView
+                        android:id="@+id/rank"
+                        style="@style/normal_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="rank: "
+                        app:layout_constraintStart_toStartOf="@+id/profileCL"
+                        app:layout_constraintTop_toBottomOf="@+id/firstName" />
+
+                    <TextView
+                        android:id="@+id/rating"
+                        style="@style/normal_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="rating: "
+                        app:layout_constraintStart_toStartOf="@+id/profileCL"
+                        app:layout_constraintTop_toBottomOf="@+id/rank" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/moreInfoCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileCard">
 
-                <TextView
-                    android:id="@+id/tvRatingTable"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rating Table"
-                    app:layout_constraintStart_toStartOf="@id/ratingTableCardCL"
-                    app:layout_constraintTop_toTopOf="@id/ratingTableCardCL" />
 
-                <ImageButton
-                    android:id="@+id/btnExpandRatingTable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvRatingTable"
-                    app:layout_constraintEnd_toEndOf="@id/ratingTableCardCL"
-                    app:layout_constraintTop_toTopOf="@id/tvRatingTable" />
-
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/ratingTable"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/moreInfoCL"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_margin="4dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvRatingTable" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tvMoreInfo"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="More Info"
+                        app:layout_constraintBottom_toBottomOf="@id/btnMoreInfoCardExpand"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/btnMoreInfoCardExpand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBottom_toBottomOf="@id/tvMoreInfo"
+                        app:layout_constraintEnd_toEndOf="@id/moreInfoCL"
+                        app:layout_constraintTop_toTopOf="@id/tvMoreInfo" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/moreInfoDropDownCL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="@id/moreInfoCL"
+                        app:layout_constraintStart_toStartOf="@id/moreInfoCL"
+                        app:layout_constraintTop_toBottomOf="@id/tvMoreInfo">
+
+                        <TextView
+                            android:id="@+id/contribution"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="contribution: "
+                            app:layout_constraintStart_toStartOf="@id/moreInfoDropDownCL"
+                            app:layout_constraintTop_toTopOf="@id/moreInfoDropDownCL" />
+
+                        <TextView
+                            android:id="@+id/city"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="city: "
+                            app:layout_constraintStart_toStartOf="@+id/moreInfoDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@+id/contribution" />
+
+                        <TextView
+                            android:id="@+id/country"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="country: "
+                            app:layout_constraintStart_toStartOf="@+id/moreInfoDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@+id/city" />
+
+                        <TextView
+                            android:id="@+id/organization"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="organization: "
+                            app:layout_constraintStart_toStartOf="@+id/moreInfoDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@+id/country" />
+
+                        <TextView
+                            android:id="@+id/registrationTimeSeconds"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="registrationTimeSeconds: "
+                            app:layout_constraintStart_toStartOf="@+id/moreInfoDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@+id/organization" />
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/levelTableCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingTableCard">
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/levelTableCardCL"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/performanceCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:layout_marginTop="4dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/moreInfoCard">
 
-                <TextView
-                    android:id="@+id/tvLevelTable"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Level Table"
-                    app:layout_constraintStart_toStartOf="@id/levelTableCardCL"
-                    app:layout_constraintTop_toTopOf="@id/levelTableCardCL" />
-
-                <ImageButton
-                    android:id="@+id/btnExpandLevelTable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvLevelTable"
-                    app:layout_constraintEnd_toEndOf="@id/levelTableCardCL"
-                    app:layout_constraintTop_toTopOf="@id/tvLevelTable" />
-
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/levelTable"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/performanceCL"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvLevelTable" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tvPerformanceCard"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Contest History"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandPerformanceCard"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/ProblemTagsCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/levelTableCard">
+                    <ImageButton
+                        android:id="@+id/btnExpandPerformanceCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBottom_toBottomOf="@id/tvPerformanceCard"
+                        app:layout_constraintEnd_toEndOf="@id/performanceCL"
+                        app:layout_constraintTop_toTopOf="@id/tvPerformanceCard" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/performanceDropDownCL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="@id/performanceCL"
+                        app:layout_constraintStart_toStartOf="@id/performanceCL"
+                        app:layout_constraintTop_toBottomOf="@id/tvPerformanceCard">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/problemTagsCardCL"
+                        <TextView
+                            android:id="@+id/contestGiven"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Contest Given: "
+                            app:layout_constraintStart_toStartOf="@+id/performanceDropDownCL"
+                            app:layout_constraintTop_toTopOf="@+id/performanceDropDownCL"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/maxRank"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="maxRank: "
+                            app:layout_constraintStart_toStartOf="@id/performanceDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@id/contestGiven" />
+
+                        <TextView
+                            android:id="@+id/maxRating"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="maxRating: "
+                            app:layout_constraintStart_toStartOf="@+id/performanceDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@+id/maxRank" />
+
+                        <TextView
+                            android:id="@+id/minRatingChange"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Minimum Delta : "
+                            app:layout_constraintStart_toStartOf="@id/performanceDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@id/maxRating" />
+
+                        <TextView
+                            android:id="@+id/maxRatingChange"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Maximum Delta: "
+                            app:layout_constraintStart_toStartOf="@id/performanceDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@id/minRatingChange" />
+
+                        <TextView
+                            android:id="@+id/bestRank"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="rank: "
+                            app:layout_constraintStart_toStartOf="@id/performanceDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@id/maxRatingChange" />
+
+                        <TextView
+                            android:id="@+id/worstRank"
+                            style="@style/normal_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="worst Rank: "
+                            app:layout_constraintStart_toStartOf="@id/performanceDropDownCL"
+                            app:layout_constraintTop_toBottomOf="@id/bestRank" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ratingCurveCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:layout_marginTop="4dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/performanceCard">
 
-                <TextView
-                    android:id="@+id/tvProblemTags"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Problem Tags Chart"
-                    app:layout_constraintStart_toStartOf="@id/problemTagsCardCL"
-                    app:layout_constraintTop_toTopOf="@id/problemTagsCardCL" />
 
-                <ImageButton
-                    android:id="@+id/btnExpandProblemTagsChart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvProblemTags"
-                    app:layout_constraintEnd_toEndOf="@id/problemTagsCardCL"
-                    app:layout_constraintTop_toTopOf="@id/tvProblemTags" />
-
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartProblemTags"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ratingCurveCardCL"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintEnd_toEndOf="@id/problemTagsCardCL"
-                    app:layout_constraintStart_toStartOf="@id/problemTagsCardCL"
-                    app:layout_constraintTop_toBottomOf="@id/tvProblemTags" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/languageTagsCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ProblemTagsCard">
+                    <TextView
+                        android:id="@+id/tvRatingCurve"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Rating Curve"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandRatingCurve"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageButton
+                        android:id="@+id/btnExpandRatingCurve"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvRatingCurve"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRatingCurve"
+                        app:layout_constraintEnd_toEndOf="@id/ratingCurveCardCL"
+                        app:layout_constraintTop_toTopOf="@id/tvRatingCurve" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/languageTagsCardCL"
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/ratingCurve"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toEndOf="@id/ratingCurveCardCL"
+                        app:layout_constraintStart_toStartOf="@id/ratingCurveCardCL"
+                        app:layout_constraintTop_toBottomOf="@id/tvRatingCurve" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ratingTableCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ratingCurveCard">
 
-                <TextView
-                    android:id="@+id/tvLanguageTagsChart"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Language Tags Chart"
-                    app:layout_constraintStart_toStartOf="@id/languageTagsCardCL"
-                    app:layout_constraintTop_toTopOf="@id/languageTagsCardCL" />
 
-                <ImageButton
-                    android:id="@+id/btnExpandLanguageTagsChart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvLanguageTagsChart"
-                    app:layout_constraintEnd_toEndOf="@id/languageTagsCardCL"
-                    app:layout_constraintTop_toTopOf="@id/languageTagsCardCL" />
-
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartLanguage"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ratingTableCardCL"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintEnd_toEndOf="@id/languageTagsCardCL"
-                    app:layout_constraintStart_toStartOf="@id/languageTagsCardCL"
-                    app:layout_constraintTop_toBottomOf="@id/tvLanguageTagsChart" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tvRatingTable"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Rating Table"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandRatingTable"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnExpandRatingTable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvRatingTable"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRatingTable"
+                        app:layout_constraintEnd_toEndOf="@id/ratingTableCardCL"
+                        app:layout_constraintTop_toTopOf="@id/tvRatingTable" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/ratingTable"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_margin="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvRatingTable" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/submissionVerdictsCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            app:cardCornerRadius="16dp"
-            app:cardUseCompatPadding="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/languageTagsCard">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/submissionVerdictsCardCL"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/levelTableCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="2dp">
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ratingTableCard">
 
-                <TextView
-                    android:id="@+id/tvSubmissionVerdicts"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Submission Verdicts"
-                    app:layout_constraintStart_toStartOf="@id/submissionVerdictsCardCL"
-                    app:layout_constraintTop_toTopOf="@id/submissionVerdictsCardCL" />
 
-                <ImageButton
-                    android:id="@+id/btnExpandSubmissionVerdicts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_expand_more_24"
-                    app:layout_constraintBaseline_toBaselineOf="@id/tvSubmissionVerdicts"
-                    app:layout_constraintEnd_toEndOf="@id/submissionVerdictsCardCL"
-                    app:layout_constraintTop_toTopOf="@id/submissionVerdictsCardCL" />
-
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartVerdicts"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/levelTableCardCL"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintEnd_toEndOf="@id/submissionVerdictsCardCL"
-                    app:layout_constraintStart_toStartOf="@id/submissionVerdictsCardCL"
-                    app:layout_constraintTop_toBottomOf="@id/tvSubmissionVerdicts" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tvLevelTable"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Level Table"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandLevelTable"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnExpandLevelTable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvLevelTable"
+                        app:layout_constraintBottom_toBottomOf="@id/tvLevelTable"
+                        app:layout_constraintEnd_toEndOf="@id/levelTableCardCL"
+                        app:layout_constraintTop_toTopOf="@id/tvLevelTable" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/levelTable"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvLevelTable" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/ProblemTagsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/levelTableCard">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/problemTagsCardCL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/tvProblemTags"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Problem Tags Chart"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandProblemTagsChart"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnExpandProblemTagsChart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvProblemTags"
+                        app:layout_constraintBottom_toBottomOf="@id/tvProblemTags"
+                        app:layout_constraintEnd_toEndOf="@id/problemTagsCardCL"
+                        app:layout_constraintTop_toTopOf="@id/tvProblemTags" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChartProblemTags"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toEndOf="@id/problemTagsCardCL"
+                        app:layout_constraintStart_toStartOf="@id/problemTagsCardCL"
+                        app:layout_constraintTop_toBottomOf="@id/tvProblemTags" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/languageTagsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ProblemTagsCard">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/languageTagsCardCL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/tvLanguageTagsChart"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Language Tags Chart"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandLanguageTagsChart"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnExpandLanguageTagsChart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvLanguageTagsChart"
+                        app:layout_constraintBottom_toBottomOf="@id/tvLanguageTagsChart"
+                        app:layout_constraintEnd_toEndOf="@id/languageTagsCardCL"
+                        app:layout_constraintTop_toTopOf="@id/tvLanguageTagsChart" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChartLanguage"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toEndOf="@id/languageTagsCardCL"
+                        app:layout_constraintStart_toStartOf="@id/languageTagsCardCL"
+                        app:layout_constraintTop_toBottomOf="@id/tvLanguageTagsChart" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/submissionVerdictsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/languageTagsCard">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/submissionVerdictsCardCL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/tvSubmissionVerdicts"
+                        style="@style/TextAppearance.Material3.HeadlineSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Submission Verdicts"
+                        app:layout_constraintBottom_toBottomOf="@id/btnExpandSubmissionVerdicts"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/btnExpandSubmissionVerdicts" />
+
+                    <ImageButton
+                        android:id="@+id/btnExpandSubmissionVerdicts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:background="@drawable/custom_button_shape"
+                        android:padding="4dp"
+                        android:src="@drawable/baseline_expand_less_24"
+                        app:layout_constraintBaseline_toBaselineOf="@id/tvSubmissionVerdicts"
+                        app:layout_constraintBottom_toBottomOf="@id/tvSubmissionVerdicts"
+                        app:layout_constraintEnd_toEndOf="@id/submissionVerdictsCardCL"
+                        app:layout_constraintTop_toTopOf="@id/tvSubmissionVerdicts" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChartVerdicts"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:scrollbars="horizontal"
+                        app:layout_constraintEnd_toEndOf="@id/submissionVerdictsCardCL"
+                        app:layout_constraintStart_toStartOf="@id/submissionVerdictsCardCL"
+                        app:layout_constraintTop_toBottomOf="@id/tvSubmissionVerdicts" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
 </ScrollView>

@@ -17,7 +17,7 @@ import com.pareekdevansh.cftracker.databinding.FragmentContestBinding
 import com.pareekdevansh.cftracker.repository.CFRepository
 import kotlin.math.abs
 
-
+// TODO : User can see details of a contest
 class ContestFragment : Fragment() {
 
     private val TAG = "#ContestFragment"
